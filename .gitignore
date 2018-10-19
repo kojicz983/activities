@@ -108,3 +108,9 @@ venv.bak/
 
 # Virtual environment folder
 service/bin/
+
+#Ignore include folder
+service/include
+
+#Ignore pip self check
+service/pip-selfcheck.json
