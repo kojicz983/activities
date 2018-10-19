@@ -3,7 +3,7 @@ FROM python:3.6.6
 # RUN virtualenv . && . bin/activate
 WORKDIR /app
 
-COPY ./activities /app
+COPY ./src /app
 
 COPY ./requirements /requirements
 
