@@ -5,7 +5,7 @@ init:
 	docker-compose up -d
 
 clean:
-	docker-compose kill;                      \
+	docker-compose kill;                     \
 	docker-compose down -v --remove-orphans; \
 	exit 0
 
