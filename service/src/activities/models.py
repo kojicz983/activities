@@ -8,7 +8,7 @@ class Location(models.Model):
         return self.name
 
 class Topic(models.Model):
-    name = models.CharField(null=False, blank=False, max_length=50, unique=True)
+    name = models.CharField(null=False, blank=False, max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -20,7 +20,7 @@ class SDG(models.Model):
         return self.name
 
 class Category(models.Model):
-    name = models.CharField(null=False, blank=False, max_length=50, unique=True)
+    name = models.CharField(null=False, blank=False, max_length=150, unique=True)
 
     def __str__(self):
         return self.name
