@@ -33,14 +33,14 @@ class Activities(models.Model):
     project_name = models.CharField(null=False, blank=False, max_length=50)
     portfolio = models.CharField(null=False, blank=False, max_length=50)
     cluster = models.CharField(null=False, blank=False, max_length=50)
-    specific_activity = models.CharField(null=False, blank=False, max_length=50)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    donor_1 = models.CharField(null=False, blank=False, max_length=50)
-    donor_2 = models.CharField(null=False, blank=False, max_length=50)
-    donor_3 = models.CharField(null=False, blank=False, max_length=50)
+    specific_activity = models.CharField(null=False, blank=False, max_length=300)
+    start_date = models.CharField(null=False, blank=False, max_length=50)
+    end_date = models.CharField(null=True, blank=True, max_length=50)
+    donor_1 = models.CharField(null=True, blank=False, max_length=50)
+    donor_2 = models.CharField(null=True, blank=True, max_length=50)
+    donor_3 = models.CharField(null=True, blank=True, max_length=50)
     activity_value = models.IntegerField()
-    beneficiaries = models.CharField(null=False, blank=False, max_length=50)
+    beneficiaries = models.CharField(null=True, blank=True, max_length=50)
 
     def __str__(self):
         return self.project_name
