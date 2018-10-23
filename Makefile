@@ -9,7 +9,7 @@ clean:
 	docker-compose down -v --remove-orphans; \
 	exit 0
 
-boot: clean init migrations superuser sdgs topics categories
+boot: clean init migrations superuser sdgs topics categories import-data
 	google-chrome http://0.0.0.0:8000/ &&\
 	$(MAKE) logs
 
@@ -73,6 +73,10 @@ categories:
 	Category.objects.create(name='Expert support (e.g. DU, Belgrade)'); \
 	Category.objects.create(name='Normative support (for preparation or implementation of any law or bylaw e.g. VaW, open data?)'); \
 	Category.objects.create(name='Innovative solutions');"
+
+## Import data
+import-data:
+	docker-compose exec service python manage.py import
 
 logs:
 	docker-compose logs -f
