@@ -78,5 +78,9 @@ categories:
 import-data:
 	docker-compose exec service python manage.py import
 
+## Find geo locations
+findgeo:
+	docker-compose exec service python manage.py findgeo
+
 logs:
 	docker-compose logs -f

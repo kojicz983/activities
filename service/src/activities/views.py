@@ -45,6 +45,6 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitiesSerializer
 
 
-class ActivitiesListView(ListView):
+class ActivitiesListView(ListView): 
     template_name = 'index.html'
     model = Activities
