@@ -1,3 +1,5 @@
+from django.views.generic import ListView
+
 from rest_framework import serializers, viewsets
 from .models import Activities, Location, Category, Topic, SDG
 
@@ -41,3 +43,8 @@ class ActivitiesSerializer(serializers.ModelSerializer):
 class ActivitiesViewSet(viewsets.ModelViewSet):
     queryset = Activities.objects.all()
     serializer_class = ActivitiesSerializer
+
+
+class ActivitiesListView(ListView):
+    template_name = 'index.html'
+    model = Activities
