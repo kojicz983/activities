@@ -28,7 +28,7 @@ class SDGSerializer(serializers.ModelSerializer):
 
 
 class ActivitiesSerializer(serializers.ModelSerializer):
-    location = SDGSerializer()
+    location = LocationSerializer()
     category = CategorySerializer()
     topic = TopicSerializer()
     sdg = SDGSerializer()
