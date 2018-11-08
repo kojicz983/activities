@@ -15,15 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from activities.views import ActivitiesViewSet, ActivitiesListView
+from activities.views import ActivitiesViewSet, ActivitiesListView, IndexView
 from rest_framework import routers
+from django.views.generic import TemplateView
+
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 router.register(r'api/activities', ActivitiesViewSet)
 
 urlpatterns = [
-    path('', ActivitiesListView.as_view(), name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
-]
+    path('api-auth/', include('rest_framework.urls')),
+    path('activities/', ActivitiesListView.as_view(), name='activities')
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

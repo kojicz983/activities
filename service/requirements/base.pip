@@ -6,3 +6,8 @@ pandas>=0.23.4
 xlrd>=1.1.0
 numpy>==1.15.2
 requests>=2.20.0
+django-geojson==2.10.0
+django-leaflet==0.24.0
+jsonfield==2.0.2
+Pillow==4.2.1
+six==1.10.0

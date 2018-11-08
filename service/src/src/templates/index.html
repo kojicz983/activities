@@ -1,4 +1,141 @@
+{% load leaflet_tags %}
 <html>
-    <head></head>
-    <body>Hello</body>
+    <head>
+        {% leaflet_js %}
+        {% leaflet_css %}
+        {% load static %}
+        <script src="/static/geojson/serbia_municipality.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.css" />
+		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.Default.css" />
+		<script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+        <style>
+            .leaflet-container { height: 800px; width: 800px}
+        </style>
+        
+        <script type="text/javascript">
+
+        var projects = null;    
+        var locations = null;
+        var sdgs = null;
+        var topics = null;
+    
+
+		function onEachFeature(feature, layer) {
+		// layer.on({
+		// 	mouseover: processMouseOver,
+		// 	mouseout: resetHighlight,
+		// });
+
+		}		
+
+		function getFillColor(municipality_name) {
+            var match = false;
+			for (var i in projects) {
+				//console.log('Location', projects[i].location);
+				//console.log('Municipality', municipality_name);
+				if(projects[i].fields.location_data.name === municipality_name) {
+					match = true;
+					break;
+				}
+			}
+			
+			if (match === true) return 'rgb(0, 54, 128)'
+            else 
+            return '#000'
+			
+        }
+        
+		function style(feature) {
+			return {
+				weight: 1,
+				opacity: 1,
+				color: 'rgb(255, 255, 255)',
+				dashArray: '',
+				fillOpacity: 0.5,
+				fillColor: getFillColor(feature.properties.NAME_2)//'rgb(0, 54, 128)'
+			};
+		}            
+
+            window.addEventListener("map:init", function(event) {
+                var map = event.detail.map;
+
+            var dataurl = '/api/activities/';
+
+            //fetch(dataurl)
+                // .then(function(resp) {
+                //     return resp.json();
+                // })
+            //    .then(function(data) {
+                    sdgs = JSON.parse("{{sdgs_json|escapejs}}");
+                    locations = JSON.parse("{{locations_json|escapejs}}");
+                    topics = JSON.parse("{{topics_json|escapejs}}");
+
+                    projects = JSON.parse("{{activities|escapejs}}")//data;
+
+                    for (var i in projects) {
+                        var project = projects[i];
+                        console.log(project)
+                        for (var j in locations) {
+                            if (project.fields.location === locations[j].pk) {
+                                console.log(locations[j].fields)
+                                project.fields['location_data'] = {}
+                                project.fields.location_data.name = locations[j].fields.name
+                                project.fields.location_data.latitude = locations[j].fields.latitude
+                                project.fields.location_data.longitude = locations[j].fields.longitude
+                            }
+                        }
+                    }
+
+
+                    var markers = L.markerClusterGroup();
+		
+                    for (var i = 0; i < projects.length; i++) {
+                        var a = projects[i];
+                        var title = a.fields.project_name;
+                        var marker = L.marker(new L.LatLng(a.fields.location_data.latitude, a.fields.location_data.longitude), { title: title });
+                        marker.bindPopup(title);
+                        markers.addLayer(marker);
+                    }
+                    
+                    map.addLayer(markers);
+
+                    var countriesLayer = L.geoJson(municipality_data,
+                    {
+                        clickable:true,
+                        style: style,
+                        onEachFeature: onEachFeature
+                    }).addTo(map);
+                 })
+
+             //});
+
+
+        </script>
+    </head>
+    <body>
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                <select name="sdgs" data-placeholder="Prikazi sve" onchange="this.form.submit()">
+                    <option value="0">Prikazi sve</option>
+                    {% for sdg in sdgs %}
+                    <option value={{ sdg.id }} {% if request.POST.sdgs == sdg.id|slugify  %} selected {% endif %}>{{ sdg.name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="topics" data-placeholder="Prikazi sve">
+                        <option value="0">Prikazi sve</option>
+                        {% for topic in topics %}
+                        <option value={{ topic.id }} {% if request.POST.topics == topic.id|slugify  %} selected {% endif %}>{{ topic.name }}</option>
+                        {% endfor %}
+                </select>
+                <select name="categories" data-placeholder="Prikazi sve">
+                        <option value="0">Prikazi sve</option>
+                        {% for category in categories %}
+                        <option value={{ category.id }} {% if request.POST.categories == category.id|slugify  %} selected {% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                </select>
+            </form>
+        </div>
+            {% leaflet_map "main" %}
+    </body>
 </html>

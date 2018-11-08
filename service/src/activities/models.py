@@ -32,7 +32,7 @@ class Activities(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     sdg = models.ForeignKey(SDG, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    project_name = models.CharField(null=False, blank=False, max_length=50)
+    project_name = models.CharField(null=False, blank=False, max_length=300)
     portfolio = models.CharField(null=False, blank=False, max_length=50)
     cluster = models.CharField(null=False, blank=False, max_length=50)
     specific_activity = models.CharField(null=False, blank=False, max_length=300)
