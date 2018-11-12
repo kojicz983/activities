@@ -57,59 +57,9 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
 class ActivitiesListView(ListView): 
     model = Activities
 
+
 class IndexView(TemplateView):
     template_name='index.html'
 
     def get(self, request):
-        sdgs = SDG.objects.all()
-        topics = Topic.objects.all()
-        locations = Location.objects.all()
-        categories = Category.objects.all()
-
-        sdgs_json = serializer.serialize("json", sdgs)
-        category_json = serializer.serialize("json", categories)
-        topics_json = serializer.serialize("json", topics)
-        locations_json = serializer.serialize("json", locations)
-
-        activities = serializer.serialize("json", Activities.objects.all())
-
-        args = {'sdgs': sdgs, 
-                'topics': topics, 
-                'categories': categories, 
-                'locations':locations, 
-                'activities': activities, 
-                'sdgs_json': sdgs_json, 
-                'locations_json': locations_json,
-                'topics_json': topics_json 
-                }
-        return render(request, self.template_name, args)
-    
-    def post(self, request):
-        sdgs = SDG.objects.all()
-        topics = Topic.objects.all()
-        locations = Location.objects.all()
-        categories = Category.objects.all()
-
-        sdgs_json = serializer.serialize("json", sdgs)
-        category_json = serializer.serialize("json", categories)
-        topics_json = serializer.serialize("json", topics)
-        locations_json = serializer.serialize("json", locations)
-
-        sdgs_filter = request.POST.get('sdgs')
-
-        activities = serializer.serialize("json", Activities.objects.all())
-        if sdgs_filter != "0":
-         activities = serializer.serialize("json", Activities.objects.filter(sdg=sdgs_filter))    
-
-
-        args = {'sdgs': sdgs, 
-                'topics': topics, 
-                'categories': categories, 
-                'locations':locations, 
-                'activities': activities, 
-                'sdgs_json': sdgs_json, 
-                'locations_json': locations_json,
-                'topics_json': topics_json 
-                }
-
-        return render(request, self.template_name, args)
+        return render(request, self.template_name, {})
