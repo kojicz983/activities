@@ -54,12 +54,17 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitiesSerializer
 
 
-class ActivitiesListView(ListView): 
+class ActivitiesListView(ListView):
     model = Activities
 
 
 class IndexView(TemplateView):
     template_name='index.html'
 
-    def get(self, request):
-        return render(request, self.template_name, {})
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['sdgs'] = SDG.objects.all()
+        context['topics'] = Topic.objects.all()
+        context['locations'] = Location.objects.all()
+        context['categories'] = Category.objects.all()
+        return context

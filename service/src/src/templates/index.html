@@ -10,33 +10,22 @@
 		<script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
         <style>
             .leaflet-container { height: 100%; width: 100%}
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f1f1f1;
+                min-width: 160px;
+                overflow: auto;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+            .show {display: block;}
         </style>
     </head>
     <body>
-        <div>
-            <form method="POST">
-                {% csrf_token %}
-                <select name="sdgs" data-placeholder="Prikazi sve" onchange="this.form.submit()">
-                    <option value="0">Prikazi sve</option>
-                    {% for sdg in sdgs %}
-                    <option value={{ sdg.id }} {% if request.POST.sdgs == sdg.id|slugify  %} selected {% endif %}>{{ sdg.name }}</option>
-                    {% endfor %}
-                </select>
-                <select name="topics" data-placeholder="Prikazi sve">
-                        <option value="0">Prikazi sve</option>
-                        {% for topic in topics %}
-                        <option value={{ topic.id }} {% if request.POST.topics == topic.id|slugify  %} selected {% endif %}>{{ topic.name }}</option>
-                        {% endfor %}
-                </select>
-                <select name="categories" data-placeholder="Prikazi sve">
-                        <option value="0">Prikazi sve</option>
-                        {% for category in categories %}
-                        <option value={{ category.id }} {% if request.POST.categories == category.id|slugify  %} selected {% endif %}>{{ category.name }}</option>
-                        {% endfor %}
-                </select>
-            </form>
-        </div>
-            {% leaflet_map "main" %}
+        {% leaflet_map "main" %}
     </body>
     <script type="text/javascript">
 
@@ -71,6 +60,71 @@
         window.addEventListener("map:init", function(event) {
 
             var map = event.detail.map;
+
+            <!-- Filters -->
+            var filters = L.control({
+                position: 'topleft'
+            });
+
+            function renderSDGFilters() {
+                var sdg_html = '<div class="dropdown">';
+                sdg_html += '<button id="sdg_btn" onclick="sdgDropDown()" class="dropbtn">Select SDG</button>';
+                sdg_html += '<div id="sdg" class="dropdown-content">';
+                sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
+
+                {% for sdg in sdgs %}
+                sdg_html += '<div id="sdg_{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
+                {% endfor %}
+
+                sdg_html += '</div>';
+                sdg_html += '</div>';
+
+                return sdg_html
+            }
+
+            function renderTopicFilters() {
+                var topic_html = '<div class="dropdown">';
+                topic_html += '<button id="topic_btn" onclick="topicDropDown()" class="dropbtn">Select Topic</button>';
+                topic_html += '<div id="topic" class="dropdown-content">';
+                topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
+
+                {% for topic in topics %}
+                topic_html += '<div id="topic_{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
+                {% endfor %}
+
+                topic_html += '</div>';
+                topic_html += '</div>';
+
+                return topic_html
+            }
+
+            function renderCategoryFilters() {
+                var category_html = '<div class="dropdown">';
+                category_html += '<button id="category_btn" onclick="categoryDropDown()" class="dropbtn">Select Category</button>';
+                category_html += '<div id="category" class="dropdown-content">';
+                category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
+
+                {% for category in categories %}
+                category_html += '<div id="category_{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
+                {% endfor %}
+
+                category_html += '</div>';
+                category_html += '</div>';
+
+                return category_html
+            }
+
+            filters.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'filters');
+                div.innerHTML = renderSDGFilters() + renderTopicFilters() + renderCategoryFilters();
+                return div;
+            };
+
+            filters.addTo(map);
+            <!-- END Filters -->
+
+
+
 
             var info = L.control();
 
@@ -197,5 +251,49 @@
                     console.log(error);
                 })
         });
+    </script>
+    <script>
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function sdgDropDown() {
+            document.getElementById("sdg").classList.toggle("show");
+        }
+
+        function topicDropDown() {
+            document.getElementById("topic").classList.toggle("show");
+        }
+
+        function categoryDropDown() {
+            document.getElementById("category").classList.toggle("show");
+        }
+
+        function filterSelected(element, type) {
+            if (type === 'sdg') {
+                document.getElementById("sdg_btn").textContent = element.textContent;
+            }
+
+            if (type === 'topic') {
+                document.getElementById("topic_btn").textContent = element.textContent;
+            }
+
+            if (type === 'category') {
+                document.getElementById("category_btn").textContent = element.textContent;
+            }
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
     </script>
 </html>
