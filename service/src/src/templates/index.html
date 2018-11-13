@@ -73,7 +73,7 @@
                 sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
 
                 {% for sdg in sdgs %}
-                sdg_html += '<div id="sdg_{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
+                sdg_html += '<div id="sdg_{{ sdg.id }}" value="{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
                 {% endfor %}
 
                 sdg_html += '</div>';
@@ -89,7 +89,7 @@
                 topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
 
                 {% for topic in topics %}
-                topic_html += '<div id="topic_{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
+                topic_html += '<div id="topic_{{ topic.id }}" value="{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
                 {% endfor %}
 
                 topic_html += '</div>';
@@ -105,7 +105,7 @@
                 category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
 
                 {% for category in categories %}
-                category_html += '<div id="category_{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
+                category_html += '<div id="category_{{ category.id }}" value="{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
                 {% endfor %}
 
                 category_html += '</div>';
@@ -136,7 +136,7 @@
 
             info.update = function (props, markers) {
                 var html = '<h1>' + props.NAME_1 + ' okrug</h1>';
-                html += '<h2>' + props.NAME_2 + ' okrug</h2>';
+                html += '<h2>' + props.NAME_2 + '</h2>';
                 for(var i = 0; i < markers.length; i++) {
                     html += '<h4>' + markers[0].options.project.project_name + '</h4>';
                     html += '<p>SDG: ' + markers[0].options.project.sdg.name + '</p>';
@@ -181,12 +181,10 @@
                             for(var i = 0; i < clusterMarkers.length; i++) {
                                 if (isMarkerInsidePolygon(clusterMarkers[i], layer)) {
                                     markers.push(clusterMarkers[i]);
-                                    console.log(clusterMarkers[i]._leaflet_id);
                                 }
                             }
                         } else if (isMarkerInsidePolygon(item, layer)) {
                             markers.push(item);
-                            console.log(item._leaflet_id);
                         }
                     }
 
@@ -235,10 +233,9 @@
                     var markers = L.markerClusterGroup();
 
                     for (var i = 0; i < data.length; i++) {
-                        // debugger;
                         var item = data[i];
                         var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item }); //.on('click', markerClick);
-                        marker.bindPopup('<h1>' + item.prject_name + '</h1>');
+                        marker.bindPopup('<h1>' + item.project_name + '</h1>');
                         markers.addLayer(marker);
                         // var marker = L.marker(new L.LatLng(a.location.latitude, a.location.longitude)).on('click', highlightFeature).addTo(map);
                     }
@@ -268,17 +265,51 @@
         }
 
         function filterSelected(element, type) {
+
             if (type === 'sdg') {
+                var sdg_value = element.getAttribute('value')
                 document.getElementById("sdg_btn").textContent = element.textContent;
+                document.getElementById("sdg_btn").value = sdg_value;
             }
 
             if (type === 'topic') {
+                var topic_value = element.getAttribute('value')
                 document.getElementById("topic_btn").textContent = element.textContent;
+                document.getElementById("topic_btn").value = topic_value;
             }
 
             if (type === 'category') {
+                var category_value = element.getAttribute('value')
                 document.getElementById("category_btn").textContent = element.textContent;
+                document.getElementById("category_btn").value = category_value;
             }
+
+            var sdg = document.getElementById("sdg_btn").getAttribute('value')
+            var topic = document.getElementById("topic_btn").getAttribute('value')
+            var category = document.getElementById("category_btn").getAttribute('value')
+
+            var url = '/api/activities/?';
+            var params = {};
+            if (sdg !== null && sdg !== 'null') { params.sdg = sdg };
+            if (topic !== null && topic !== 'null') { params.topic = topic };
+            if (category !== null && category !== 'null') { params.category = category };
+
+            var query = Object.keys(params)
+                .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+                .join('&');
+
+		    url = url + query;
+
+            fetch(url, {
+                method: 'get'
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                debugger;
+                console.log(data);
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
 
         // Close the dropdown if the user clicks outside of it

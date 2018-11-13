@@ -1,17 +1,16 @@
-from django.views.generic import ListView
-
-from rest_framework import serializers, viewsets
-from .models import Activities, Location, Category, Topic, SDG
-from django.shortcuts import render
-
-from django.views.generic import TemplateView
-
-from django.core import serializers as serializer
-
-from rest_framework.renderers import JSONRenderer
-
 import json
 
+from django.core import serializers as serializer
+from django.views.generic import ListView
+from django.views.generic import TemplateView
+from django.shortcuts import render
+
+from rest_framework import serializers, viewsets
+
+from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import FilterSet
+
+from .models import Activities, Location, Category, Topic, SDG
 
 # Create your views here.
 class LocationSerializer(serializers.ModelSerializer):
@@ -49,9 +48,15 @@ class ActivitiesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ActivitiesFilter(FilterSet):
+    class Meta:
+        model = Activities
+        fields = ('sdg', 'topic', 'category' )
+
 class ActivitiesViewSet(viewsets.ModelViewSet):
     queryset = Activities.objects.all()
     serializer_class = ActivitiesSerializer
+    filter_class = ActivitiesFilter
 
 
 class ActivitiesListView(ListView):
