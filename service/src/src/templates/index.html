@@ -5,9 +5,58 @@
         {% leaflet_css %}
         {% load static %}
         <script src="/static/geojson/serbia_municipality.js" type="text/javascript"></script>
-		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.css" />
-		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.Default.css" />
-		<script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+        <link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.css" />
+        <link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.Default.css" />
+        <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+        <script>
+            function renderSDGFilters() {
+                var sdg_html = '<div class="dropdown">';
+                sdg_html += '<button id="sdg_btn" onclick="sdgDropDown()" class="dropbtn">Select SDG</button>';
+                sdg_html += '<div id="sdg" class="dropdown-content">';
+                sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
+
+                {% for sdg in sdgs %}
+                sdg_html += '<div id="sdg_{{ sdg.id }}" value="{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
+                {% endfor %}
+
+                sdg_html += '</div>';
+                sdg_html += '</div>';
+
+                return sdg_html
+            }
+
+            function renderTopicFilters() {
+                var topic_html = '<div class="dropdown">';
+                topic_html += '<button id="topic_btn" onclick="topicDropDown()" class="dropbtn">Select Topic</button>';
+                topic_html += '<div id="topic" class="dropdown-content">';
+                topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
+
+                {% for topic in topics %}
+                topic_html += '<div id="topic_{{ topic.id }}" value="{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
+                {% endfor %}
+
+                topic_html += '</div>';
+                topic_html += '</div>';
+
+                return topic_html
+            }
+
+            function renderCategoryFilters() {
+                var category_html = '<div class="dropdown">';
+                category_html += '<button id="category_btn" onclick="categoryDropDown()" class="dropbtn">Select Category</button>';
+                category_html += '<div id="category" class="dropdown-content">';
+                category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
+
+                {% for category in categories %}
+                category_html += '<div id="category_{{ category.id }}" value="{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
+                {% endfor %}
+
+                category_html += '</div>';
+                category_html += '</div>';
+
+                return category_html
+            }
+        </script>
         <style>
             .leaflet-container { height: 100%; width: 100%}
 
@@ -32,8 +81,6 @@
         function getFillColor(municipality_name) {
             var match = false;
             for (var i in projects) {
-                //console.log('Location', projects[i].location);
-                //console.log('Municipality', municipality_name);
                 if(projects[i].location.name === municipality_name) {
                     match = true;
                     break;
@@ -86,54 +133,6 @@
                 position: 'topleft'
             });
 
-            function renderSDGFilters() {
-                var sdg_html = '<div class="dropdown">';
-                sdg_html += '<button id="sdg_btn" onclick="sdgDropDown()" class="dropbtn">Select SDG</button>';
-                sdg_html += '<div id="sdg" class="dropdown-content">';
-                sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
-
-                {% for sdg in sdgs %}
-                sdg_html += '<div id="sdg_{{ sdg.id }}" value="{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
-                {% endfor %}
-
-                sdg_html += '</div>';
-                sdg_html += '</div>';
-
-                return sdg_html
-            }
-
-            function renderTopicFilters() {
-                var topic_html = '<div class="dropdown">';
-                topic_html += '<button id="topic_btn" onclick="topicDropDown()" class="dropbtn">Select Topic</button>';
-                topic_html += '<div id="topic" class="dropdown-content">';
-                topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
-
-                {% for topic in topics %}
-                topic_html += '<div id="topic_{{ topic.id }}" value="{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
-                {% endfor %}
-
-                topic_html += '</div>';
-                topic_html += '</div>';
-
-                return topic_html
-            }
-
-            function renderCategoryFilters() {
-                var category_html = '<div class="dropdown">';
-                category_html += '<button id="category_btn" onclick="categoryDropDown()" class="dropbtn">Select Category</button>';
-                category_html += '<div id="category" class="dropdown-content">';
-                category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
-
-                {% for category in categories %}
-                category_html += '<div id="category_{{ category.id }}" value="{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
-                {% endfor %}
-
-                category_html += '</div>';
-                category_html += '</div>';
-
-                return category_html
-            }
-
             filters.onAdd = function (map) {
                 var div = L.DomUtil.create('div', 'filters');
                 div.innerHTML = renderSDGFilters() + renderTopicFilters() + renderCategoryFilters();
@@ -143,9 +142,7 @@
             filters.addTo(map);
             <!-- END Filters -->
 
-
-
-
+            <!-- Info -->
             var info = L.control();
 
             info.onAdd = function (map) {
@@ -165,6 +162,7 @@
             };
 
             info.addTo(map);
+            <!-- END Info -->
 
             function onEachFeature(feature, layer) {
                 layer.on({
@@ -325,7 +323,6 @@
                 var map = mapsPlaceholder[0];
                 deleteAllMarkers(map);
                 setMarkers(map, data)
-                console.log(data);
             }).catch(function (error) {
                 console.log(error);
             });
