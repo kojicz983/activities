@@ -110,18 +110,22 @@
           mapsPlaceholder.push(this);
         });
 
+        var markers = null;
         function setMarkers(map, data) {
-            var markers = L.markerClusterGroup();
+            markers = L.markerClusterGroup();
 
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
                 var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item }); //.on('click', markerClick);
                 marker.bindPopup('<h1>' + item.project_name + '</h1>');
                 markers.addLayer(marker);
-                // var marker = L.marker(new L.LatLng(a.location.latitude, a.location.longitude)).on('click', highlightFeature).addTo(map);
             }
 
             map.addLayer(markers);
+        }
+
+        function deleteAllMarkers(map) {
+            map.removeLayer(markers);
         }
 
         window.addEventListener("map:init", function(event) {
@@ -255,17 +259,6 @@
         });
     </script>
     <script>
-        /* When the user clicks on the button,
-        toggle between hiding and showing the dropdown content */
-        function deleteAllMarkers(map) {
-            map.eachLayer(function(layer) {
-
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-
-            });
-        }
 
         function sdgDropDown() {
             document.getElementById("sdg").classList.toggle("show");
