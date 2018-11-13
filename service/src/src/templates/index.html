@@ -57,6 +57,26 @@
             };
         }
 
+        var mapsPlaceholder = [];
+
+        L.Map.addInitHook(function () {
+          mapsPlaceholder.push(this);
+        });
+
+        function setMarkers(map, data) {
+            var markers = L.markerClusterGroup();
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item }); //.on('click', markerClick);
+                marker.bindPopup('<h1>' + item.project_name + '</h1>');
+                markers.addLayer(marker);
+                // var marker = L.marker(new L.LatLng(a.location.latitude, a.location.longitude)).on('click', highlightFeature).addTo(map);
+            }
+
+            map.addLayer(markers);
+        }
+
         window.addEventListener("map:init", function(event) {
 
             var map = event.detail.map;
@@ -188,7 +208,7 @@
                         }
                     }
 
-                })
+                });
 
                 // layer.setStyle({
                 //     weight: 5,
@@ -229,20 +249,7 @@
                     return resp.json();
                 })
                .then(function(data) {
-
-                    var markers = L.markerClusterGroup();
-
-                    for (var i = 0; i < data.length; i++) {
-                        var item = data[i];
-                        var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item }); //.on('click', markerClick);
-                        marker.bindPopup('<h1>' + item.project_name + '</h1>');
-                        markers.addLayer(marker);
-                        // var marker = L.marker(new L.LatLng(a.location.latitude, a.location.longitude)).on('click', highlightFeature).addTo(map);
-                    }
-
-                    map.addLayer(markers);
-
-
+                   setMarkers(map, data)
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -252,6 +259,16 @@
     <script>
         /* When the user clicks on the button,
         toggle between hiding and showing the dropdown content */
+        function deleteAllMarkers(map) {
+            map.eachLayer(function(layer) {
+
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+
+            });
+        }
+
         function sdgDropDown() {
             document.getElementById("sdg").classList.toggle("show");
         }
@@ -305,7 +322,9 @@
             }).then(function (response) {
                 return response.json();
             }).then(function (data) {
-                debugger;
+                var map = mapsPlaceholder[0];
+                deleteAllMarkers(map);
+                setMarkers(map, data)
                 console.log(data);
             }).catch(function (error) {
                 console.log(error);
