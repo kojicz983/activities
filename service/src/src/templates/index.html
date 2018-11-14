@@ -30,12 +30,12 @@
                     <div>
                         <div>
                             <h3>Topic:</h3>
-                            <form action="" name="topics">
-                                    <input type="radio" value="0" name="topics" onclick="onOptionChange()">Show All<br>
+                            <div action="" id="topics">
+                                    <input checked="checked" type="radio" value="0" name="topics" onclick="onOptionChange()">Show All<br>
                                 {% for topic in topics %}
                                     <input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}<br>
                                 {% endfor %}
-                            </form>
+                            </div>
                         </div>
                         <div>
                             <h3>SDG:</h3>
@@ -83,6 +83,8 @@
                                     <label class="sdgimage sdg16" for="sdg16"></label>
                                     <input id="sdg17" type="radio" name="sdgs" value="17" onclick="onOptionChange()"/>
                                     <label class="sdgimage sdg17" for="sdg17"></label>
+                                    <input checked="checked" id="sdg-main" type="radio" name="sdgs" value="0" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg-main" for="sdg-main"></label>
                                 </div>
                             </div>
                         <div>
