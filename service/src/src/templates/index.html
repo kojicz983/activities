@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.css" />
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.Default.css" />
     <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+    <link rel="stylesheet" href="/static/css/sidebar.css" />
     <style>
         .leaflet-container { height: 100%; width: 100%}
         .controlers { width: 500px;}
@@ -79,6 +80,9 @@
             </div>
         </div>
         {% leaflet_map "main" %}
+        <div id="sidebar">
+            <h1>right-sidebar</h1>
+        </div>
     </div>
 </body>
 <script type="text/javascript">
@@ -87,6 +91,7 @@
     var markers = null;
     var info = null;
     var map = null;
+    var sidebar = null;
 
     function onOptionChange() {
 
@@ -167,8 +172,9 @@
 
     function markerClick(e) {
         var layer = e.target;
-        debugger;
-        console.log(layer.options.project.project_name);
+        // debugger;
+        sidebar.setContent(layer.options.project.project_name);
+        sidebar.show();
     }
 
     function isMarkerInsidePolygon(marker, poly) {
@@ -192,6 +198,12 @@
 
         map = event.detail.map;
 
+        sidebar = L.control.sidebar('sidebar', {
+            position: 'right'
+        });
+
+        map.addControl(sidebar);
+
         // var map = L.map('map').setView([44.008248, 20.914047], 7);
 
         L.geoJson(municipality_data, {
@@ -214,5 +226,5 @@
             })
     });
 </script>
-
+<script src="/static/js/sidebar.js"></script>
 </html>
