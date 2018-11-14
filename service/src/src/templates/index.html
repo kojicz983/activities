@@ -11,12 +11,13 @@
     <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
     <style>
         .leaflet-container { height: 100%; width: 100%}
-        </style>
+        .controlers { width: 500px;}
+    </style>
 </head>
 
 <body>
     <div style="display:flex;">
-        <div>
+        <div class="controlers">
             <div>
                 <h3>Topic:</h3>
                 <form action="" name="topics">
@@ -148,7 +149,7 @@
 
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
-            var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item }); //.on('click', markerClick);
+            var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item });
             marker.bindPopup('<h1>' + item.project_name + '</h1>');
             markers.addLayer(marker);
         }
@@ -156,56 +157,10 @@
         map.addLayer(markers);
     }
 
-    function updateMunicipalityInfo(props, markers) {
-        var element = document.getElementById('mun_info');
-
-        var html = '';
-        html += '<h2>' + props.NAME_2 + '</h2>';
-        for (var i = 0; i < markers.length; i++) {
-            html += '<div style="border: solid; border-width: 1px;">'
-            html += '<p>PROJECT NAME: ' + markers[0].options.project.project_name + '</p>';
-            html += '<p>SDG: ' + markers[0].options.project.sdg.name + '</p>';
-            html += '<p>VALUE: ' + markers[0].options.project.activity_value + ' USD</p>';
-            html += '</div>'
-        }
-        element.innerHTML = html;
-    };
-
-    function highlightFeature(e) {
-        var layer = e.target;
-        var markers = [];
-        map.eachLayer(function (item) {
-
-            if (item instanceof L.Marker) {
-
-                if (item instanceof L.MarkerCluster) {
-                    var clusterMarkers = item.getAllChildMarkers()
-                    for (var i = 0; i < clusterMarkers.length; i++) {
-                        if (isMarkerInsidePolygon(clusterMarkers[i], layer)) {
-                            markers.push(clusterMarkers[i]);
-                        }
-                    }
-                } else if (isMarkerInsidePolygon(item, layer)) {
-                    markers.push(item);
-                }
-            }
-
-        });
-
-        updateMunicipalityInfo(layer.feature.properties, markers)
-        //info.update(layer.feature.properties, markers);
-    }
-
     function markerClick(e) {
         var layer = e.target;
         debugger;
         info.update(layer.options.title);
-    }
-
-    function onEachFeature(feature, layer) {
-        layer.on({
-            click: highlightFeature
-        });
     }
 
     function isMarkerInsidePolygon(marker, poly) {
@@ -232,13 +187,9 @@
         var options = {
             clickable: true,
             style: style,
-            onEachFeature: onEachFeature
         };
 
         L.geoJson(municipality_data, options).addTo(map);
-
-        map.resetviewControl.setPosition('topright');
-        map.zoomControl.setPosition('topright');
 
         var dataurl = '/api/activities/';
 
