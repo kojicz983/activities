@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.Default.css" />
 		<script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
         <style>
-            .leaflet-container { height: 100%; width: 100%}
+            .leaflet-container { height: 100%; width: 800px}
 
             .dropdown-content {
                 display: none;
@@ -25,15 +25,119 @@
         </style>
     </head>
     <body>
-        {% leaflet_map "main" %}
+            <div style="display:flex;">
+                    <div>
+                        <div>
+                            <h3>Topic:</h3>
+                            <form action="" name="topics">
+                                    <input type="radio" value="0" name="topics" onclick="onOptionChange()">Show All<br>
+                                {% for topic in topics %}
+                                    <input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}<br>
+                                {% endfor %}
+                            </form>
+                        </div>
+                        <div>
+                            <h3>SDG:</h3>
+                            <!-- <form>
+                                {% for sdg in sdgs %}
+                                    <input type="radio" value={{ sdg.id }} {% if request.POST.sdgs == sdg.id|slugify  %} selected {% endif %}>{{ sdg.name }}<br>
+                                {% endfor %}
+                            </form> -->
+                            <div>
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-3.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-4.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-5.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-6.png" />
+                            </div>
+                            <div>
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-7.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-8.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-9.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-10.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-11.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-12.png" />
+                            </div>
+                            <div>
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-13.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-14.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-15.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-16.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-17.png" />
+                            </div>                    
+                        </div>
+                        <div>
+                            <h3>Category:</h3>
+                            <!-- <form action="">
+                                {% for category in categories %}
+                                    <input type="radio" value={{ category.id }}>{{ category.name }}<br>
+                                {% endfor %}
+                            </form> -->
+                        </div>                
+                    </div>
+                    {% leaflet_map "main" %}
+                    <div>
+                        <h3>Info</h3>
+                        <div id="mun_info">
+                            
+                        </div>
+                    </div>
+                </div>
     </body>
     <script type="text/javascript">
+
+        var projects = null;
+        var projectMunicipalities = null;
+        var markers = null;
+        var info = null;
+        var map = null;
+
+        function onOptionChange() {
+
+            var topic = 0;
+            var topics = document.getElementsByName("topics");
+
+            for (var i in topics) {
+                if (topics[i].checked) {
+                    topic = topics[i].value;
+                }
+            }
+
+            var url = '/api/activities/?';
+            var params = {};
+            if (topic != 0) { params.topic = topic };
+
+            var query = Object.keys(params)
+                .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+                .join('&');
+
+            url = url + query;
+
+            fetch(url, {
+                method: 'get'
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                projects = data;
+                var map = mapsPlaceholder[0];
+                deleteAllMarkers(map);
+                setMarkers(map, data)
+                projectMunicipalities = L.geoJson(municipality_data, {
+                clickable: true,
+                style: style,
+                onEachFeature: onEachFeature
+            }).addTo(map);
+
+                console.log(data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
 
         function getFillColor(municipality_name) {
             var match = false;
             for (var i in projects) {
-                //console.log('Location', projects[i].location);
-                //console.log('Municipality', municipality_name);
                 if(projects[i].location.name === municipality_name) {
                     match = true;
                     break;
@@ -49,11 +153,11 @@
         function style(feature) {
             return {
                 weight: 1,
-                // opacity: 1,
-                // color: 'rgb(255, 255, 255)',
+                 opacity: 1,
+                 color: 'rgb(255, 255, 255)',
                 dashArray: '',
-                // fillOpacity: 0.5,
-                // fillColor: getFillColor(feature.properties.NAME_2)//'rgb(0, 54, 128)'
+                fillOpacity: 0.5,
+                fillColor: getFillColor(feature.properties.NAME_2)//'rgb(0, 54, 128)'
             };
         }
 
@@ -63,8 +167,9 @@
           mapsPlaceholder.push(this);
         });
 
+        
         function setMarkers(map, data) {
-            var markers = L.markerClusterGroup();
+            markers = L.markerClusterGroup();
 
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
@@ -77,159 +182,219 @@
             map.addLayer(markers);
         }
 
-        window.addEventListener("map:init", function(event) {
+        function updateMunicipalityInfo(props, markers) {
+            var element = document.getElementById('mun_info');
 
-            var map = event.detail.map;
+            var html = '';
+            html += '<h2>' + props.NAME_2 + '</h2>';
+            for(var i = 0; i < markers.length; i++) {
+                html += '<div style="border: solid; border-width: 1px;">'
+                html += '<p>PROJECT NAME: ' + markers[0].options.project.project_name + '</p>';
+                html += '<p>SDG: ' + markers[0].options.project.sdg.name + '</p>';
+                html += '<p>VALUE: ' + markers[0].options.project.activity_value + ' USD</p>';
+                html += '</div>'
+            }
+            element.innerHTML = html;
+        };
 
-            <!-- Filters -->
-            var filters = L.control({
-                position: 'topleft'
+        function highlightFeature(e) {
+            var layer = e.target;
+            var markers = [];
+            map.eachLayer(function(item) {
+
+                if (item instanceof L.Marker) {
+
+                    if (item instanceof L.MarkerCluster) {
+                        var clusterMarkers = item.getAllChildMarkers()
+                        for(var i = 0; i < clusterMarkers.length; i++) {
+                            if (isMarkerInsidePolygon(clusterMarkers[i], layer)) {
+                                markers.push(clusterMarkers[i]);
+                            }
+                        }
+                    } else if (isMarkerInsidePolygon(item, layer)) {
+                        markers.push(item);
+                    }
+                }
+
             });
 
-            function renderSDGFilters() {
-                var sdg_html = '<div class="dropdown">';
-                sdg_html += '<button id="sdg_btn" onclick="sdgDropDown()" class="dropbtn">Select SDG</button>';
-                sdg_html += '<div id="sdg" class="dropdown-content">';
-                sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
+            updateMunicipalityInfo(layer.feature.properties, markers)
+            //info.update(layer.feature.properties, markers);
+        }
 
-                {% for sdg in sdgs %}
-                sdg_html += '<div id="sdg_{{ sdg.id }}" value="{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
-                {% endfor %}
+        function markerClick(e) {
+            var layer = e.target;
+            debugger;
+            info.update(layer.options.title);
+        }
 
-                sdg_html += '</div>';
-                sdg_html += '</div>';
+        function onEachFeature(feature, layer) {
+            layer.on({
+                click: highlightFeature
+            });
+        }
 
-                return sdg_html
+        function isMarkerInsidePolygon(marker, poly) {
+            var polyPoints = poly.getLatLngs()[0];
+            var x = marker.getLatLng().lat, y = marker.getLatLng().lng;
+
+            var inside = false;
+            for (var i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
+                var xi = polyPoints[i].lat, yi = polyPoints[i].lng;
+                var xj = polyPoints[j].lat, yj = polyPoints[j].lng;
+
+                var intersect = ((yi > y) != (yj > y))
+                    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
             }
 
-            function renderTopicFilters() {
-                var topic_html = '<div class="dropdown">';
-                topic_html += '<button id="topic_btn" onclick="topicDropDown()" class="dropbtn">Select Topic</button>';
-                topic_html += '<div id="topic" class="dropdown-content">';
-                topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
+            return inside;
+        };
 
-                {% for topic in topics %}
-                topic_html += '<div id="topic_{{ topic.id }}" value="{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
-                {% endfor %}
+        window.addEventListener("map:init", function(event) {
 
-                topic_html += '</div>';
-                topic_html += '</div>';
+            map = event.detail.map;
 
-                return topic_html
-            }
+            // <!-- Filters -->
+            // var filters = L.control({
+            //     position: 'topleft'
+            // });
 
-            function renderCategoryFilters() {
-                var category_html = '<div class="dropdown">';
-                category_html += '<button id="category_btn" onclick="categoryDropDown()" class="dropbtn">Select Category</button>';
-                category_html += '<div id="category" class="dropdown-content">';
-                category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
+            // function renderSDGFilters() {
+            //     var sdg_html = '<div class="dropdown">';
+            //     sdg_html += '<button id="sdg_btn" onclick="sdgDropDown()" class="dropbtn">Select SDG</button>';
+            //     sdg_html += '<div id="sdg" class="dropdown-content">';
+            //     sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
 
-                {% for category in categories %}
-                category_html += '<div id="category_{{ category.id }}" value="{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
-                {% endfor %}
+            //     {% for sdg in sdgs %}
+            //     sdg_html += '<div id="sdg_{{ sdg.id }}" value="{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
+            //     {% endfor %}
 
-                category_html += '</div>';
-                category_html += '</div>';
+            //     sdg_html += '</div>';
+            //     sdg_html += '</div>';
 
-                return category_html
-            }
+            //     return sdg_html
+            // }
 
-            filters.onAdd = function (map) {
-                var div = L.DomUtil.create('div', 'filters');
-                div.innerHTML = renderSDGFilters() + renderTopicFilters() + renderCategoryFilters();
-                return div;
-            };
+            // function renderTopicFilters() {
+            //     var topic_html = '<div class="dropdown">';
+            //     topic_html += '<button id="topic_btn" onclick="topicDropDown()" class="dropbtn">Select Topic</button>';
+            //     topic_html += '<div id="topic" class="dropdown-content">';
+            //     topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
 
-            filters.addTo(map);
-            <!-- END Filters -->
+            //     {% for topic in topics %}
+            //     topic_html += '<div id="topic_{{ topic.id }}" value="{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
+            //     {% endfor %}
 
+            //     topic_html += '</div>';
+            //     topic_html += '</div>';
 
+            //     return topic_html
+            // }
 
+            // function renderCategoryFilters() {
+            //     var category_html = '<div class="dropdown">';
+            //     category_html += '<button id="category_btn" onclick="categoryDropDown()" class="dropbtn">Select Category</button>';
+            //     category_html += '<div id="category" class="dropdown-content">';
+            //     category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
 
-            var info = L.control();
+            //     {% for category in categories %}
+            //     category_html += '<div id="category_{{ category.id }}" value="{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
+            //     {% endfor %}
 
-            info.onAdd = function (map) {
-                this._div = L.DomUtil.create('div', 'info');
-                // this.update();
-                return this._div;
-            };
+            //     category_html += '</div>';
+            //     category_html += '</div>';
 
-            info.update = function (props, markers) {
-                var html = '<h1>' + props.NAME_1 + ' okrug</h1>';
-                html += '<h2>' + props.NAME_2 + '</h2>';
-                for(var i = 0; i < markers.length; i++) {
-                    html += '<h4>' + markers[0].options.project.project_name + '</h4>';
-                    html += '<p>SDG: ' + markers[0].options.project.sdg.name + '</p>';
-                }
-                this._div.innerHTML = html;
-            };
+            //     return category_html
+            // }
 
-            info.addTo(map);
+            // filters.onAdd = function (map) {
+            //     var div = L.DomUtil.create('div', 'filters');
+            //     div.innerHTML = renderSDGFilters() + renderTopicFilters() + renderCategoryFilters();
+            //     return div;
+            // };
 
-            function onEachFeature(feature, layer) {
-                layer.on({
-                    click: highlightFeature
-                });
-            }
+            // filters.addTo(map);
+            // <!-- END Filters -->
 
-            function isMarkerInsidePolygon(marker, poly) {
-                var polyPoints = poly.getLatLngs()[0];
-                var x = marker.getLatLng().lat, y = marker.getLatLng().lng;
+            // info = L.control();
 
-                var inside = false;
-                for (var i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
-                    var xi = polyPoints[i].lat, yi = polyPoints[i].lng;
-                    var xj = polyPoints[j].lat, yj = polyPoints[j].lng;
+            // info.onAdd = function (map) {
+            //     this._div = L.DomUtil.create('div', 'info');
+            //     // this.update();
+            //     return this._div;
+            // };
 
-                    var intersect = ((yi > y) != (yj > y))
-                        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-                    if (intersect) inside = !inside;
-                }
+            // info.update = function (props, markers) {
+            //     var html = '<h1>' + props.NAME_1 + ' okrug</h1>';
+            //     html += '<h2>' + props.NAME_2 + '</h2>';
+            //     for(var i = 0; i < markers.length; i++) {
+            //         html += '<h4>' + markers[0].options.project.project_name + '</h4>';
+            //         html += '<p>SDG: ' + markers[0].options.project.sdg.name + '</p>';
+            //     }
+            //     this._div.innerHTML = html;
+            // };
 
-                return inside;
-            };
+            // info.addTo(map);
 
-            function highlightFeature(e) {
-                var layer = e.target;
-                var markers = [];
-                map.eachLayer(function(item) {
+            // function isMarkerInsidePolygon(marker, poly) {
+            //     var polyPoints = poly.getLatLngs()[0];
+            //     var x = marker.getLatLng().lat, y = marker.getLatLng().lng;
 
-                    if (item instanceof L.Marker) {
+            //     var inside = false;
+            //     for (var i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
+            //         var xi = polyPoints[i].lat, yi = polyPoints[i].lng;
+            //         var xj = polyPoints[j].lat, yj = polyPoints[j].lng;
 
-                        if (item instanceof L.MarkerCluster) {
-                            var clusterMarkers = item.getAllChildMarkers()
-                            for(var i = 0; i < clusterMarkers.length; i++) {
-                                if (isMarkerInsidePolygon(clusterMarkers[i], layer)) {
-                                    markers.push(clusterMarkers[i]);
-                                }
-                            }
-                        } else if (isMarkerInsidePolygon(item, layer)) {
-                            markers.push(item);
-                        }
-                    }
+            //         var intersect = ((yi > y) != (yj > y))
+            //             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            //         if (intersect) inside = !inside;
+            //     }
 
-                });
+            //     return inside;
+            // };
 
-                // layer.setStyle({
-                //     weight: 5,
-                //     color: 'rgb(51, 136, 255)',
-                //     dashArray: '',
-                //     fillOpacity: 0.7,
-                //     fillColor: 'rgb(51, 136, 255)'
-                // });
+            // function highlightFeature(e) {
+            //     var layer = e.target;
+            //     var markers = [];
+            //     map.eachLayer(function(item) {
 
-                // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                //     layer.bringToFront();
-                // }
+            //         if (item instanceof L.Marker) {
 
-                info.update(layer.feature.properties, markers);
-            }
+            //             if (item instanceof L.MarkerCluster) {
+            //                 var clusterMarkers = item.getAllChildMarkers()
+            //                 for(var i = 0; i < clusterMarkers.length; i++) {
+            //                     if (isMarkerInsidePolygon(clusterMarkers[i], layer)) {
+            //                         markers.push(clusterMarkers[i]);
+            //                     }
+            //                 }
+            //             } else if (isMarkerInsidePolygon(item, layer)) {
+            //                 markers.push(item);
+            //             }
+            //         }
 
-            function markerClick(e) {
-                var layer = e.target;
-                debugger;
-                info.update(layer.options.title);
-            }
+            //     });
+
+            //     // layer.setStyle({
+            //     //     weight: 5,
+            //     //     color: 'rgb(51, 136, 255)',
+            //     //     dashArray: '',
+            //     //     fillOpacity: 0.7,
+            //     //     fillColor: 'rgb(51, 136, 255)'
+            //     // });
+
+            //     // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            //     //     layer.bringToFront();
+            //     // }
+
+            //     info.update(layer.feature.properties, markers);
+            // }
+
+            // function markerClick(e) {
+            //     var layer = e.target;
+            //     debugger;
+            //     info.update(layer.options.title);
+            // }
 
             var options = {
                 clickable: true,
@@ -237,10 +402,8 @@
                 onEachFeature: onEachFeature
             };
 
-            L.geoJson(municipality_data, options).addTo(map);
-
-            map.resetviewControl.setPosition('bottomleft');
-            map.zoomControl.setPosition('bottomleft');
+            map.resetviewControl.setPosition('topright');
+            map.zoomControl.setPosition('topright');
 
             var dataurl = '/api/activities/';
 
@@ -249,6 +412,8 @@
                     return resp.json();
                 })
                .then(function(data) {
+                   projects = data;
+                   projectMunicipalities = L.geoJson(municipality_data, options).addTo(map);
                    setMarkers(map, data)
                 })
                 .catch(function(error) {
@@ -260,13 +425,8 @@
         /* When the user clicks on the button,
         toggle between hiding and showing the dropdown content */
         function deleteAllMarkers(map) {
-            map.eachLayer(function(layer) {
-
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-
-            });
+            map.removeLayer(projectMunicipalities);
+            map.removeLayer(markers);
         }
 
         function sdgDropDown() {
@@ -315,21 +475,36 @@
                 .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
                 .join('&');
 
-		    url = url + query;
+            url = url + query;
+            
+
+            function onEachFeature(feature, layer) {
+                layer.on({
+                    click: highlightFeature
+                });
+            }
 
             fetch(url, {
                 method: 'get'
             }).then(function (response) {
                 return response.json();
             }).then(function (data) {
+                projects = data;
                 var map = mapsPlaceholder[0];
                 deleteAllMarkers(map);
                 setMarkers(map, data)
+                projectMunicipalities = L.geoJson(municipality_data, {
+                clickable: true,
+                style: style,
+                onEachFeature: onEachFeature
+            }).addTo(map);
+
                 console.log(data);
             }).catch(function (error) {
                 console.log(error);
             });
         }
+        
 
         // Close the dropdown if the user clicks outside of it
         window.onclick = function(event) {
