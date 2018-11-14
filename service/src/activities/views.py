@@ -8,7 +8,7 @@ from django.shortcuts import render
 from rest_framework import serializers, viewsets
 
 from django_filters.rest_framework import DjangoFilterBackend
-from django_filters import FilterSet
+from django_filters import FilterSet, RangeFilter
 
 from .models import Activities, Location, Category, Topic, SDG
 
@@ -49,9 +49,12 @@ class ActivitiesSerializer(serializers.ModelSerializer):
 
 
 class ActivitiesFilter(FilterSet):
+    activity_value = RangeFilter()
+
     class Meta:
         model = Activities
-        fields = ('sdg', 'topic', 'category' )
+        fields = ('sdg', 'topic', 'category', 'activity_value' )
+
 
 class ActivitiesViewSet(viewsets.ModelViewSet):
     queryset = Activities.objects.all()

@@ -12,6 +12,30 @@
     <style>
         .leaflet-container { height: 100%; width: 100%}
         .controlers { width: 500px;}
+        .sdg-contorls [type=radio] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* IMAGE STYLES */
+        [type=radio] + img {
+            cursor: pointer;
+        }
+
+        /* CHECKED STYLES */
+        [type=radio]:checked + img {
+            filter: grayscale(0%);
+        }
+        .sdg-image {
+            filter: grayscale(100%);
+            height: 48px;
+            width: 48px;
+        }
+        .topic-option {
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -20,14 +44,16 @@
         <div class="controlers">
             <div>
                 <h3>Topic:</h3>
-                <form action="" name="topics">
-                    <input type="radio" value="0" name="topics" onclick="onOptionChange()">Show All<br>
-                    {% for topic in topics %}
-                    <input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}<br>
-                    {% endfor %}
-                </form>
+                <label class="topic-option">
+                    <p><input type="radio" value="0" name="topics" onclick="onOptionChange()">Show All</p>
+                </label>
+                {% for topic in topics %}
+                <label class="topic-option">
+                    <p><input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}</p>
+                </label>
+                {% endfor %}
             </div>
-            <div>
+            <div class="sdg-contorls">
                 <h3>SDG:</h3>
                 <!-- <form>
                     {% for sdg in sdgs %}
@@ -35,27 +61,12 @@
                     {% endfor %}
                 </form> -->
                 <div>
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-1.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-3.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-4.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-5.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-6.png" />
-                </div>
-                <div>
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-7.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-8.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-9.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-10.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-11.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-12.png" />
-                </div>
-                <div>
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-13.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-14.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-15.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-16.png" />
-                    <img style="height: 48px; width: 48px;" src="/static/images/sdg-17.png" />
+                    {% for sdg in sdgs %}
+                    <label>
+                        <input type="radio" value={{ sdg.id }} name="sdg">
+                        <img class="sdg-image" src="/static/images/sdg-{{ forloop.counter }}.png" />
+                    </label>
+                    {% endfor %}
                 </div>
             </div>
             <div>
@@ -150,17 +161,21 @@
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item });
-            marker.bindPopup('<h1>' + item.project_name + '</h1>');
+            marker.on('click', markerClick);
             markers.addLayer(marker);
         }
 
         map.addLayer(markers);
     }
 
+    function deleteAllMarkers(map) {
+        map.removeLayer(markers);
+    }
+
     function markerClick(e) {
         var layer = e.target;
         debugger;
-        info.update(layer.options.title);
+        console.log(layer.options.project.project_name);
     }
 
     function isMarkerInsidePolygon(marker, poly) {
@@ -184,12 +199,12 @@
 
         map = event.detail.map;
 
-        var options = {
+        // var map = L.map('map').setView([44.008248, 20.914047], 7);
+
+        L.geoJson(municipality_data, {
             clickable: true,
             style: style,
-        };
-
-        L.geoJson(municipality_data, options).addTo(map);
+        }).addTo(map);
 
         var dataurl = '/api/activities/';
 
@@ -198,6 +213,7 @@
                 return resp.json();
             })
             .then(function (data) {
+                projects = data;
                 setMarkers(map, data)
             })
             .catch(function (error) {
