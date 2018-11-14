@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.Default.css" />
 		<script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
         <style>
-            .leaflet-container { height: 100%; width: 800px}
+            .leaflet-container { height: 100%; width: 100%}
 
             .dropdown-content {
                 display: none;
@@ -44,7 +44,7 @@
                                 {% endfor %}
                             </form> -->
                             <div>
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
+                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-1.png" />
                                 <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
                                 <img style="height: 48px; width: 48px;" src="/static/images/sdg-3.png" />
                                 <img style="height: 48px; width: 48px;" src="/static/images/sdg-4.png" />
@@ -65,7 +65,7 @@
                                 <img style="height: 48px; width: 48px;" src="/static/images/sdg-15.png" />
                                 <img style="height: 48px; width: 48px;" src="/static/images/sdg-16.png" />
                                 <img style="height: 48px; width: 48px;" src="/static/images/sdg-17.png" />
-                            </div>                    
+                            </div>
                         </div>
                         <div>
                             <h3>Category:</h3>
@@ -74,21 +74,14 @@
                                     <input type="radio" value={{ category.id }}>{{ category.name }}<br>
                                 {% endfor %}
                             </form> -->
-                        </div>                
-                    </div>
-                    {% leaflet_map "main" %}
-                    <div>
-                        <h3>Info</h3>
-                        <div id="mun_info">
-                            
                         </div>
                     </div>
+                    {% leaflet_map "main" %}
                 </div>
     </body>
     <script type="text/javascript">
 
         var projects = null;
-        var projectMunicipalities = null;
         var markers = null;
         var info = null;
         var map = null;
@@ -123,13 +116,6 @@
                 var map = mapsPlaceholder[0];
                 deleteAllMarkers(map);
                 setMarkers(map, data)
-                projectMunicipalities = L.geoJson(municipality_data, {
-                clickable: true,
-                style: style,
-                onEachFeature: onEachFeature
-            }).addTo(map);
-
-                console.log(data);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -167,7 +153,6 @@
           mapsPlaceholder.push(this);
         });
 
-        
         function setMarkers(map, data) {
             markers = L.markerClusterGroup();
 
@@ -176,7 +161,6 @@
                 var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item }); //.on('click', markerClick);
                 marker.bindPopup('<h1>' + item.project_name + '</h1>');
                 markers.addLayer(marker);
-                // var marker = L.marker(new L.LatLng(a.location.latitude, a.location.longitude)).on('click', highlightFeature).addTo(map);
             }
 
             map.addLayer(markers);
@@ -255,152 +239,13 @@
 
             map = event.detail.map;
 
-            // <!-- Filters -->
-            // var filters = L.control({
-            //     position: 'topleft'
-            // });
-
-            // function renderSDGFilters() {
-            //     var sdg_html = '<div class="dropdown">';
-            //     sdg_html += '<button id="sdg_btn" onclick="sdgDropDown()" class="dropbtn">Select SDG</button>';
-            //     sdg_html += '<div id="sdg" class="dropdown-content">';
-            //     sdg_html += '<div id="sdg_0" onclick="filterSelected(sdg_0, \'sdg\')">Show all</div>';
-
-            //     {% for sdg in sdgs %}
-            //     sdg_html += '<div id="sdg_{{ sdg.id }}" value="{{ sdg.id }}" onclick="filterSelected(sdg_{{ sdg.id }}, \'sdg\')">{{ sdg.name }}</div>';
-            //     {% endfor %}
-
-            //     sdg_html += '</div>';
-            //     sdg_html += '</div>';
-
-            //     return sdg_html
-            // }
-
-            // function renderTopicFilters() {
-            //     var topic_html = '<div class="dropdown">';
-            //     topic_html += '<button id="topic_btn" onclick="topicDropDown()" class="dropbtn">Select Topic</button>';
-            //     topic_html += '<div id="topic" class="dropdown-content">';
-            //     topic_html += '<div id="topic_0" onclick="filterSelected(topic_0, \'topic\')">Show all</div>';
-
-            //     {% for topic in topics %}
-            //     topic_html += '<div id="topic_{{ topic.id }}" value="{{ topic.id }}" onclick="filterSelected(topic_{{ topic.id }}, \'topic\')">{{ topic.name }}</div>';
-            //     {% endfor %}
-
-            //     topic_html += '</div>';
-            //     topic_html += '</div>';
-
-            //     return topic_html
-            // }
-
-            // function renderCategoryFilters() {
-            //     var category_html = '<div class="dropdown">';
-            //     category_html += '<button id="category_btn" onclick="categoryDropDown()" class="dropbtn">Select Category</button>';
-            //     category_html += '<div id="category" class="dropdown-content">';
-            //     category_html += '<div id="category_0" onclick="filterSelected(category_0, \'category\')">Show all</div>';
-
-            //     {% for category in categories %}
-            //     category_html += '<div id="category_{{ category.id }}" value="{{ category.id }}" onclick="filterSelected(category_{{ category.id }}, \'category\')">{{ category.name }}</div>';
-            //     {% endfor %}
-
-            //     category_html += '</div>';
-            //     category_html += '</div>';
-
-            //     return category_html
-            // }
-
-            // filters.onAdd = function (map) {
-            //     var div = L.DomUtil.create('div', 'filters');
-            //     div.innerHTML = renderSDGFilters() + renderTopicFilters() + renderCategoryFilters();
-            //     return div;
-            // };
-
-            // filters.addTo(map);
-            // <!-- END Filters -->
-
-            // info = L.control();
-
-            // info.onAdd = function (map) {
-            //     this._div = L.DomUtil.create('div', 'info');
-            //     // this.update();
-            //     return this._div;
-            // };
-
-            // info.update = function (props, markers) {
-            //     var html = '<h1>' + props.NAME_1 + ' okrug</h1>';
-            //     html += '<h2>' + props.NAME_2 + '</h2>';
-            //     for(var i = 0; i < markers.length; i++) {
-            //         html += '<h4>' + markers[0].options.project.project_name + '</h4>';
-            //         html += '<p>SDG: ' + markers[0].options.project.sdg.name + '</p>';
-            //     }
-            //     this._div.innerHTML = html;
-            // };
-
-            // info.addTo(map);
-
-            // function isMarkerInsidePolygon(marker, poly) {
-            //     var polyPoints = poly.getLatLngs()[0];
-            //     var x = marker.getLatLng().lat, y = marker.getLatLng().lng;
-
-            //     var inside = false;
-            //     for (var i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
-            //         var xi = polyPoints[i].lat, yi = polyPoints[i].lng;
-            //         var xj = polyPoints[j].lat, yj = polyPoints[j].lng;
-
-            //         var intersect = ((yi > y) != (yj > y))
-            //             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-            //         if (intersect) inside = !inside;
-            //     }
-
-            //     return inside;
-            // };
-
-            // function highlightFeature(e) {
-            //     var layer = e.target;
-            //     var markers = [];
-            //     map.eachLayer(function(item) {
-
-            //         if (item instanceof L.Marker) {
-
-            //             if (item instanceof L.MarkerCluster) {
-            //                 var clusterMarkers = item.getAllChildMarkers()
-            //                 for(var i = 0; i < clusterMarkers.length; i++) {
-            //                     if (isMarkerInsidePolygon(clusterMarkers[i], layer)) {
-            //                         markers.push(clusterMarkers[i]);
-            //                     }
-            //                 }
-            //             } else if (isMarkerInsidePolygon(item, layer)) {
-            //                 markers.push(item);
-            //             }
-            //         }
-
-            //     });
-
-            //     // layer.setStyle({
-            //     //     weight: 5,
-            //     //     color: 'rgb(51, 136, 255)',
-            //     //     dashArray: '',
-            //     //     fillOpacity: 0.7,
-            //     //     fillColor: 'rgb(51, 136, 255)'
-            //     // });
-
-            //     // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-            //     //     layer.bringToFront();
-            //     // }
-
-            //     info.update(layer.feature.properties, markers);
-            // }
-
-            // function markerClick(e) {
-            //     var layer = e.target;
-            //     debugger;
-            //     info.update(layer.options.title);
-            // }
-
             var options = {
                 clickable: true,
                 style: style,
                 onEachFeature: onEachFeature
             };
+
+            L.geoJson(municipality_data, options).addTo(map);
 
             map.resetviewControl.setPosition('topright');
             map.zoomControl.setPosition('topright');
@@ -412,113 +257,11 @@
                     return resp.json();
                 })
                .then(function(data) {
-                   projects = data;
-                   projectMunicipalities = L.geoJson(municipality_data, options).addTo(map);
                    setMarkers(map, data)
                 })
                 .catch(function(error) {
                     console.log(error);
                 })
         });
-    </script>
-    <script>
-        /* When the user clicks on the button,
-        toggle between hiding and showing the dropdown content */
-        function deleteAllMarkers(map) {
-            map.removeLayer(projectMunicipalities);
-            map.removeLayer(markers);
-        }
-
-        function sdgDropDown() {
-            document.getElementById("sdg").classList.toggle("show");
-        }
-
-        function topicDropDown() {
-            document.getElementById("topic").classList.toggle("show");
-        }
-
-        function categoryDropDown() {
-            document.getElementById("category").classList.toggle("show");
-        }
-
-        function filterSelected(element, type) {
-
-            if (type === 'sdg') {
-                var sdg_value = element.getAttribute('value')
-                document.getElementById("sdg_btn").textContent = element.textContent;
-                document.getElementById("sdg_btn").value = sdg_value;
-            }
-
-            if (type === 'topic') {
-                var topic_value = element.getAttribute('value')
-                document.getElementById("topic_btn").textContent = element.textContent;
-                document.getElementById("topic_btn").value = topic_value;
-            }
-
-            if (type === 'category') {
-                var category_value = element.getAttribute('value')
-                document.getElementById("category_btn").textContent = element.textContent;
-                document.getElementById("category_btn").value = category_value;
-            }
-
-            var sdg = document.getElementById("sdg_btn").getAttribute('value')
-            var topic = document.getElementById("topic_btn").getAttribute('value')
-            var category = document.getElementById("category_btn").getAttribute('value')
-
-            var url = '/api/activities/?';
-            var params = {};
-            if (sdg !== null && sdg !== 'null') { params.sdg = sdg };
-            if (topic !== null && topic !== 'null') { params.topic = topic };
-            if (category !== null && category !== 'null') { params.category = category };
-
-            var query = Object.keys(params)
-                .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-                .join('&');
-
-            url = url + query;
-            
-
-            function onEachFeature(feature, layer) {
-                layer.on({
-                    click: highlightFeature
-                });
-            }
-
-            fetch(url, {
-                method: 'get'
-            }).then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                projects = data;
-                var map = mapsPlaceholder[0];
-                deleteAllMarkers(map);
-                setMarkers(map, data)
-                projectMunicipalities = L.geoJson(municipality_data, {
-                clickable: true,
-                style: style,
-                onEachFeature: onEachFeature
-            }).addTo(map);
-
-                console.log(data);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        
-
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function(event) {
-          if (!event.target.matches('.dropbtn')) {
-
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-          }
-        }
     </script>
 </html>
