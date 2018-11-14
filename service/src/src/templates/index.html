@@ -7,7 +7,8 @@
         <script src="/static/geojson/serbia_municipality.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.css" />
 		<link rel="stylesheet" href="/static/js/markercluster/MarkerCluster.Default.css" />
-		<script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+        <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+        <link rel="stylesheet" href="/static/css/map-style.css" />
         <style>
             .leaflet-container { height: 100%; width: 800px}
 
@@ -43,30 +44,47 @@
                                     <input type="radio" value={{ sdg.id }} {% if request.POST.sdgs == sdg.id|slugify  %} selected {% endif %}>{{ sdg.name }}<br>
                                 {% endfor %}
                             </form> -->
-                            <div>
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-2.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-3.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-4.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-5.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-6.png" />
+                            <div class="sdgselector">
+                                <input id="sdg1" type="radio" name="sdgs" value="1" onclick="onOptionChange()"/>
+                                <label class="sdgimage sdg1" for="sdg1"></label>
+                                <input id="sdg2" type="radio" name="sdgs" value="2" onclick="onOptionChange()"/>
+                                <label class="sdgimage sdg2" for="sdg2"></label>
+                                <input id="sdg3" type="radio" name="sdgs" value="3" onclick="onOptionChange()"/>
+                                <label class="sdgimage sdg3" for="sdg3"></label>
+                                <input id="sdg4" type="radio" name="sdgs" value="4" onclick="onOptionChange()"/>
+                                <label class="sdgimage sdg4" for="sdg4"></label>
+                                <input id="sdg5" type="radio" name="sdgs" value="5" onclick="onOptionChange()"/>
+                                <label class="sdgimage sdg5" for="sdg5"></label>
+                                <input id="sdg6" type="radio" name="sdgs" value="6" onclick="onOptionChange()"/>
+                                <label class="sdgimage sdg6" for="sdg6"></label>
                             </div>
-                            <div>
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-7.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-8.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-9.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-10.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-11.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-12.png" />
+                            <div class="sdgselector">
+                                    <input id="sdg7" type="radio" name="sdgs" value="7" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg7" for="sdg7"></label>
+                                    <input id="sdg8" type="radio" name="sdgs" value="8" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg8" for="sdg8"></label>
+                                    <input id="sdg9" type="radio" name="sdgs" value="9" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg9" for="sdg9"></label>
+                                    <input id="sdg10" type="radio" name="sdgs" value="10" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg10" for="sdg10"></label>
+                                    <input id="sdg11" type="radio" name="sdgs" value="11" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg11" for="sdg11"></label>
+                                    <input id="sdg12" type="radio" name="sdgs" value="12" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg12" for="sdg12"></label>
+                                </div>
+                                <div class="sdgselector">
+                                    <input id="sdg13" type="radio" name="sdgs" value="13" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg13" for="sdg13"></label>
+                                    <input id="sdg14" type="radio" name="sdgs" value="14" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg14" for="sdg14"></label>
+                                    <input id="sdg15" type="radio" name="sdgs" value="15" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg15" for="sdg15"></label>
+                                    <input id="sdg16" type="radio" name="sdgs" value="16" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg16" for="sdg16"></label>
+                                    <input id="sdg17" type="radio" name="sdgs" value="17" onclick="onOptionChange()"/>
+                                    <label class="sdgimage sdg17" for="sdg17"></label>
+                                </div>
                             </div>
-                            <div>
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-13.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-14.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-15.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-16.png" />
-                                <img style="height: 48px; width: 48px;" src="/static/images/sdg-17.png" />
-                            </div>                    
-                        </div>
                         <div>
                             <h3>Category:</h3>
                             <!-- <form action="">
@@ -95,6 +113,8 @@
 
         function onOptionChange() {
 
+            console.log('Here');
+
             var topic = 0;
             var topics = document.getElementsByName("topics");
 
@@ -104,9 +124,19 @@
                 }
             }
 
+            var sdg = 0;
+            var sdgs = document.getElementsByName("sdgs");
+
+            for (var i in sdgs) {
+                if (sdgs[i].checked) {
+                    sdg = sdgs[i].value;
+                }
+            }
+
             var url = '/api/activities/?';
             var params = {};
             if (topic != 0) { params.topic = topic };
+            if (sdg != 0) { params.sdg = sdg };
 
             var query = Object.keys(params)
                 .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
