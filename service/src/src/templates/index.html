@@ -45,7 +45,7 @@
             <div>
                 <h3>Topic:</h3>
                 <label class="topic-option">
-                    <p><input type="radio" value="0" name="topics" onclick="onOptionChange()">Show All</p>
+                    <p><input type="radio" value="0" name="topics" onclick="onOptionChange()" checked>Show All</p>
                 </label>
                 {% for topic in topics %}
                 <label class="topic-option">
@@ -90,14 +90,7 @@
 
     function onOptionChange() {
 
-        var topic = 0;
-        var topics = document.getElementsByName("topics");
-
-        for (var i in topics) {
-            if (topics[i].checked) {
-                topic = topics[i].value;
-            }
-        }
+        var topic = document.querySelector('input[name=topics]:checked').value;
 
         var url = '/api/activities/?';
         var params = {};
