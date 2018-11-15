@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.css" />
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.Default.css" />
     <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+    <link rel="stylesheet" href="/static/css/map-style.css" />
     <link rel="stylesheet" href="/static/css/sidebar.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Anton" />
     <style>
         .leaflet-container { height: 100%; width: 100%}
         .controlers { width: 500px;}
@@ -65,53 +67,44 @@
 <body>
     <div>
         <img class="logo" src="data:image/jpeg;base64,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" alt="UNDP logo">
-        <h1 style="float:right;">UNDP municipality activity map 2018</h1>
+        <h1 style="float:right;">UNDP MUNICIPALITY ACTIVITY MAP 2018</h1>
     </div>
 
+ 
     <div class="sdg-color-lone" align="middle"></div>
     <div style="display:flex;">
         <div class="controlers">
-            <div>
-                <h3>Topic:</h3>
-                <label class="topic-option">
-                    <p><input type="radio" value="0" name="topics" onclick="onOptionChange()" checked>Show All</p>
-                </label>
-                {% for topic in topics %}
-                <label class="topic-option">
-                    <p><input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}</p>
-                </label>
-                {% endfor %}
-            </div>
-            <div class="sdg-contorls">
-                <h3>SDG:</h3>
-                <!-- <form>
-                    {% for sdg in sdgs %}
-                        <input type="radio" value={{ sdg.id }} {% if request.POST.sdgs == sdg.id|slugify  %} selected {% endif %}>{{ sdg.name }}<br>
+            <div class="filter-main">
+                <div class="filter-title">TOPIC</div>
+                <div class="filter-content" action="" id="topics">
+                        <input checked="checked" type="radio" value="0" name="topics" onclick="onOptionChange()">Show All<br>
+                    {% for topic in topics %}
+                        <input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}<br>
                     {% endfor %}
-                </form> -->
-                <div>
-                    {% for sdg in sdgs %}
-                    <label>
-                        <input type="radio" value={{ sdg.id }} name="sdg">
-                        <img class="sdg-image" src="/static/images/sdg-{{ forloop.counter }}.png" />
-                    </label>
-                    {% endfor %}
-                    <label>
-                        <input type="radio" value="0" name="sdg" checked>
-                        <img class="sdg-image" src="/static/images/sdg-0.png" />
-                    </label>
                 </div>
             </div>
-            <div>
-                <h3>Category:</h3>
-                <!-- <form action="">
+            <div class="filter">
+                <div class="filter-title">SDG</div>
+                    <div class="sdgselector filter-content">
+                        {% for sdg in sdgs %}
+                            <input id="sdg{{ forloop.counter }}" type="radio" value={{ sdg.id }} name="sdgs"  onclick="onOptionChange()"/>
+                            <label class="sdgimage sdg{{ forloop.counter }}" for="sdg{{ forloop.counter }}" title="{{sdg.name}}"></label>
+                        {% endfor %}
+                        <input checked="checked" id="sdg-0" type="radio" name="sdgs" value="0" onclick="onOptionChange()"/>
+                        <label title="Sustainable Development Goals" class="sdgimage sdg-0" for="sdg-0"></label>
+                    </div>
+                </div>
+            <div class="filter-main">
+                <div class="filter-title">CATEGORY</div>
+                <div class="filter-content" action="">
+                    <input checked="checked" type="radio" value="0" name="categories" onclick="onOptionChange()">Show All<br>
                     {% for category in categories %}
-                        <input type="radio" value={{ category.id }}>{{ category.name }}<br>
+                        <input type="radio" value={{ category.id }} name="categories" onclick="onOptionChange()">{{ category.name }}<br>
                     {% endfor %}
-                </form> -->
-            </div>
+                </div>
+            </div>                
         </div>
-        {% leaflet_map "main" %}
+       {% leaflet_map "main" %}
         <div id="sidebar">
         </div>
     </div>
@@ -127,10 +120,14 @@
     function onOptionChange() {
 
         var topic = document.querySelector('input[name=topics]:checked').value;
+        var sdg = document.querySelector('input[name=sdgs]:checked').value;
+        var category = document.querySelector('input[name=categories]:checked').value;
 
         var url = '/api/activities/?';
         var params = {};
         if (topic != 0) { params.topic = topic };
+        if (sdg != 0) { params.sdg = sdg };
+        if (category != 0) { params.category = category };
 
         var query = Object.keys(params)
             .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
@@ -146,8 +143,12 @@
             projects = data;
             var map = mapsPlaceholder[0];
             deleteAllMarkers(map);
-            setMarkers(map, data)
-        }).catch(function (error) {
+            setMarkers(map, data);
+            projectMunicipalities = L.geoJson(municipality_data, {
+                clickable: true,
+                style: style,
+                // onEachFeature: onEachFeature
+            }).addTo(map);        }).catch(function (error) {
             console.log(error);
         });
     }
@@ -197,6 +198,7 @@
     }
 
     function deleteAllMarkers(map) {
+        map.removeLayer(projectMunicipalities);
         map.removeLayer(markers);
     }
 
@@ -289,7 +291,7 @@
             })
             .then(function (data) {
                 projects = data;
-                L.geoJson(municipality_data, {
+                projectMunicipalities = L.geoJson(municipality_data, {
                     clickable: true,
                     style: style,
                 }).addTo(map);
