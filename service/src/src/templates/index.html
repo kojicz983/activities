@@ -113,7 +113,6 @@
         </div>
         {% leaflet_map "main" %}
         <div id="sidebar">
-            <h1>right-sidebar</h1>
         </div>
     </div>
 </body>
@@ -282,13 +281,6 @@
             sidebar.hide();
         })
 
-        // var map = L.map('map').setView([44.008248, 20.914047], 7);
-
-        L.geoJson(municipality_data, {
-            clickable: true,
-            style: style,
-        }).addTo(map);
-
         var dataurl = '/api/activities/';
 
         fetch(dataurl)
@@ -297,6 +289,10 @@
             })
             .then(function (data) {
                 projects = data;
+                L.geoJson(municipality_data, {
+                    clickable: true,
+                    style: style,
+                }).addTo(map);
                 setMarkers(map, data)
             })
             .catch(function (error) {
