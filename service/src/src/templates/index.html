@@ -179,10 +179,50 @@
     function markerClick(e) {
         var layer = e.target;
         // debugger;
-        sidebar.setContent(layer.options.project.project_name);
+
         setTimeout(function () {
+            sidebar.hide();
+        }, 300);
+
+        var html = '<h2 class="title">' + layer.options.project.project_name + '</h2><hr>';
+            html += '<div class="separator space">';
+            html += '<img src="/static/images/marker-icon.png" width="18px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + layer.options.project.location.name + '</h3>';
+            html += '</div>';
+
+            // html += '<div>Topic: ' + layer.options.project.topic.name + '</div>';
+            // html += '<div>Catgory: ' + layer.options.project.category.name + '</div>';
+            // html += '<div>Portfolio: ' + layer.options.project.portfolio + '</div>';
+            // html += '<div>Cluster: ' + layer.options.project.cluster + '</div>';
+            // html += '<div>Activity: ' + layer.options.project.specific_activity + '</div>';
+            // html += '<div>Start date: ' + layer.options.project.start_date + '</div>';
+            // html += '<div>End date: ' + layer.options.project.end_date + '</div>';
+            // html += '<div>Donors: ' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '</div>';
+            // html += '<div>Value: ' + layer.options.project.activity_value + '</div>';
+            // html += '<div>Beneficiaries: ' + layer.options.project.beneficiaries + '</div>';
+
+            html += '<table class="separator space">';
+            // html += '<tr><th>SDG:<th><td><img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;"><td></tr>';
+            html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
+            html += '<tr><th>Catgory:<th><td>' + layer.options.project.category.name + '<td></tr>';
+            html += '<tr><th>Portfolio:<th><td>' + layer.options.project.portfolio + '<td></tr>';
+            html += '<tr><th>Cluster:<th><td>' + layer.options.project.cluster + '<td></tr>';
+            html += '<tr><th>Activity:<th><td>' + layer.options.project.specific_activity + '<td></tr>';
+            html += '<tr><th>Start date:<th><td>' + layer.options.project.start_date + '<td></tr>';
+            html += '<tr><th>End date:<th><td>' + layer.options.project.end_date + '<td></tr>';
+            html += '<tr><th>Donors:<th><td>' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '<td></tr>';
+            html += '<tr><th>Value:<th><td>' + layer.options.project.activity_value + '<td></tr>';
+            html += '<tr><th>Beneficiaries:<th><td>' + layer.options.project.beneficiaries + '<td></tr>';
+
+            html += '</table>';
+
+            html += '<div class="space">';
+            html += '<img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + layer.options.project.sdg.name + '</h3>';
+            html += '</div>';
+
+        setTimeout(function () {
+            sidebar.setContent(html);
             sidebar.show();
-        }, 200);
+        }, 700);
     }
 
     function isMarkerInsidePolygon(marker, poly) {
