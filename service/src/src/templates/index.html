@@ -37,6 +37,9 @@
         .topic-option {
             width: 100%;
         }
+        .close {
+            z-index: 999 !important;
+        }
     </style>
 </head>
 
@@ -133,7 +136,6 @@
         if (match === true) return 'rgb(0, 54, 128)'
         else
             return '#000'
-
     }
 
     function style(feature) {
@@ -174,7 +176,9 @@
         var layer = e.target;
         // debugger;
         sidebar.setContent(layer.options.project.project_name);
-        sidebar.show();
+        setTimeout(function () {
+            sidebar.show();
+        }, 200);
     }
 
     function isMarkerInsidePolygon(marker, poly) {
@@ -199,10 +203,15 @@
         map = event.detail.map;
 
         sidebar = L.control.sidebar('sidebar', {
+            closeButton: true,
             position: 'right'
         });
 
         map.addControl(sidebar);
+
+        map.on('click', function () {
+            sidebar.hide();
+        })
 
         // var map = L.map('map').setView([44.008248, 20.914047], 7);
 
