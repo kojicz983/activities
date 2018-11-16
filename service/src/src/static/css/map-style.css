@@ -59,7 +59,7 @@ input:checked +.sdgimage{
     font-family: Anton;
     font-size: 1.5rem;
     color: white;
-    padding: 5px;
+    padding: 5px 0 5px 5px;
 }
 
 .filter-content {
@@ -68,7 +68,7 @@ input:checked +.sdgimage{
     font-family: Anton;
     font-size: 0.7rem;
     color: #48433d;
-    padding: 5px;
+    padding: 5px 0 5px 5px;
 }
 
 .filter-main {
