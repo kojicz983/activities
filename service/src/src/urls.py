@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from activities.views import ActivitiesViewSet, ActivitiesListView, IndexView
+from activities.views import ActivitiesViewSet, IndexView
 from rest_framework import routers
 from django.views.generic import TemplateView
 
@@ -31,5 +31,4 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('activities/', ActivitiesListView.as_view(), name='activities')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

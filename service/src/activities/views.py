@@ -62,17 +62,13 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
     filter_class = ActivitiesFilter
 
 
-class ActivitiesListView(ListView):
-    model = Activities
-
-
 class IndexView(TemplateView):
     template_name='index.html'
+    queryset = Activities.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['sdgs'] = SDG.objects.all()
-        context['topics'] = Topic.objects.all()
-        context['locations'] = Location.objects.all()
-        context['categories'] = Category.objects.all()
+        context['topics'] = Topic.objects.filter(id__in=self.queryset.values('topic').distinct())
+        context['categories'] = Category.objects.filter(id__in=self.queryset.values('category').distinct())
+        context['sdgs'] = SDG.objects.filter(id__in=self.queryset.values('sdg').distinct())
         return context
