@@ -36,8 +36,11 @@
             height: 48px;
             width: 48px;
         }
-        .topic-option {
-            width: 100%;
+        .option {
+            cursor: pointer;
+        }
+        .option > p {
+            margin: 2px;
         }
         th {
             text-align: right;
@@ -70,16 +73,16 @@
         <h1 style="float:right;">UNDP MUNICIPALITY ACTIVITY MAP 2018</h1>
     </div>
 
- 
+
     <div class="sdg-color-lone" align="middle"></div>
     <div style="display:flex;">
         <div class="controlers">
             <div class="filter-main">
                 <div class="filter-title">TOPIC</div>
                 <div class="filter-content" action="" id="topics">
-                        <input checked="checked" type="radio" value="0" name="topics" onclick="onOptionChange()">Show All<br>
+                    <label  class="option"><p><input checked="checked" type="radio" value="0" name="topics" onclick="onOptionChange()">Show All</p></label>
                     {% for topic in topics %}
-                        <input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}<br>
+                    <label  class="option"><p><input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}</p></label>
                     {% endfor %}
                 </div>
             </div>
@@ -97,12 +100,12 @@
             <div class="filter-main">
                 <div class="filter-title">CATEGORY</div>
                 <div class="filter-content" action="">
-                    <input checked="checked" type="radio" value="0" name="categories" onclick="onOptionChange()">Show All<br>
+                    <label  class="option"><p><input checked="checked" type="radio" value="0" name="categories" onclick="onOptionChange()">Show All</p></label>
                     {% for category in categories %}
-                        <input type="radio" value={{ category.id }} name="categories" onclick="onOptionChange()">{{ category.name }}<br>
+                    <label  class="option"><p><input type="radio" value={{ category.id }} name="categories" onclick="onOptionChange()">{{ category.name }}</p></label>
                     {% endfor %}
                 </div>
-            </div>                
+            </div>
         </div>
        {% leaflet_map "main" %}
         <div id="sidebar">
