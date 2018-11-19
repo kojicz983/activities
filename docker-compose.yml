@@ -6,13 +6,14 @@ services:
     build: ./service
     volumes:
       - ./service/src:/app/
+    restart: always
     environment:
       DATABASE_NAME: activities
       DATABASE_USER: postgres
       DATABASE_PASSWORD: example
       DATABASE_HOST: postgres
     ports:
-      - 8000:8000
+      - 8300:8000
 
   postgres:
     image: postgres:10
