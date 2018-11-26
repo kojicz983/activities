@@ -84,21 +84,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="filter">
-                <div class="filter-title">SDG</div>
-                    <div class="sdgselector filter-content">
-                        {% for sdg in sdgs %}
-                        <div class="sdg-item">
-                            <input id="sdg{{ forloop.counter }}" type="radio" value={{ sdg.id }} name="sdgs"  onclick="onOptionChange()"/>
-                            <label class="sdgimage sdg{{ forloop.counter }}" for="sdg{{ forloop.counter }}" title="{{sdg.name}}"></label>
-                        </div>
-                        {% endfor %}
-                        <div class="sdg-item">
-                            <input checked="checked" id="sdg-0" type="radio" name="sdgs" value="0" onclick="onOptionChange()"/>
-                            <label title="Sustainable Development Goals" class="sdgimage sdg-0" for="sdg-0"></label>
-                        </div>
-                    </div>
-                </div>
+
             <div class="filter-main">
                 <div class="filter-title">CATEGORY</div>
                 <div class="filter-content" action="">
@@ -106,6 +92,22 @@
                     {% for category in categories %}
                     <label  class="option"><p><input type="radio" value={{ category.id }} name="categories" onclick="onOptionChange()">{{ category.name }}</p></label>
                     {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter">
+                <div class="filter-title">SDG</div>
+                <div class="sdgselector filter-content">
+                    {% for sdg in sdgs %}
+                    <div class="sdg-item">
+                        <input id="sdg{{ forloop.counter }}" type="radio" value={{ sdg.id }} name="sdgs"  onclick="onOptionChange()"/>
+                        <label class="sdgimage sdg{{ forloop.counter }}" for="sdg{{ forloop.counter }}" title="{{sdg.name}}"></label>
+                    </div>
+                    {% endfor %}
+                    <div class="sdg-item">
+                        <input checked="checked" id="sdg-0" type="radio" name="sdgs" value="0" onclick="onOptionChange()"/>
+                        <label title="Sustainable Development Goals" class="sdgimage sdg-0" for="sdg-0"></label>
+                    </div>
                 </div>
             </div>
         </div>
