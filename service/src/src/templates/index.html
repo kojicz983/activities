@@ -190,15 +190,22 @@
     });
 
     function setMarkers(map, data) {
-        markers = L.markerClusterGroup();
+        markers = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            singleMarkerMode: true
+        });
 
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
-            var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item });
+            var title = item.topic.name + ' - ' + item.category.name + ': ' + item.project_name;
+            var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item, title: title });
             marker.on('click', markerClick);
             markers.addLayer(marker);
+            marker.bindPopup("<b>" + item.project_name + "</b>", {
+                "autoClose": false,
+                "closeOnClick": false
+            });
         }
-
         map.addLayer(markers);
     }
 
