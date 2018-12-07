@@ -55,8 +55,8 @@ input:checked +.sdgimage{
 
 .filter-title {
     width: 100%;
-    background: #8BB5C0;
-    font-family: Anton;
+    background: #0265b5;
+    font-family: ProximaNova, sans-serif;
     font-size: 1.5rem;
     color: white;
     padding: 5px 0 5px 5px;
@@ -64,10 +64,10 @@ input:checked +.sdgimage{
 
 .filter-content {
     width: 100%;
-    background: #E2E2E2;
-    font-family: Anton;
-    font-size: 0.7rem;
-    color: #48433d;
+    background: #E8E8E8;
+    font-family: ProximaNova, sans-serif;
+    font-size: 0.95rem;
+    color: #0a0a0a;
     padding: 5px 0 5px 5px;
 }
 
@@ -77,8 +77,61 @@ input:checked +.sdgimage{
 }
 
 h1 {
-    font-family: Anton;
+    font-family: ProximaNova, sans-serif;
     letter-spacing: 2px;
-    color: #48433d;
-    font-size: 1.9rem;
+    color: #0a0a0a;
+    font-size: 2.6rem;
+}
+
+.collapsible {
+    text-align: left;
+    cursor: pointer;
+  }
+  
+  .collapsible:hover {
+    background-color: #555;
+  }
+  
+  .collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+
+  .collapsible:after {
+    content: '\023F7'; /* Unicode character for "plus" sign (+) */
+    font-family: ProximaNova, sans-serif;
+    font-size: 1.5rem;
+    color: white;
+    float: right;
+}
+
+.active:after {
+    content: "\23F6"; /* Unicode character for "minus" sign (-) */
+}
+
+.controlers {
+    background: #E2E2E2
+}
+
+.project-info {
+    /* border-radius: 12px; */
+    font-family: ProximaNova, sans-serif;
+    border: 2px solid #E2E2E2;
+    background: #e8e8e8;
+    margin-bottom: 10px;
+    /* padding-left: 5px; */
+}
+
+.project-title {
+    /* width: 100%; */
+    font-family: ProximaNova, sans-serif;
+    background: #0265b5;
+    font-size: 1.5rem;
+    color: white;
+    padding: 5px 0px 5px 5px;
+}
+
+.leaflet-control-attribution {
+    display: none !important;
 }

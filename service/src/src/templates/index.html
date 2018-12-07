@@ -2,10 +2,11 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="/static/css/leaflet.css" />
     {% leaflet_js %}
-    {% leaflet_css %}
     {% load static %}
-    <script src="/static/geojson/serbia_municipality.js" type="text/javascript"></script>
+    <!-- <script src="/static/geojson/serbia_municipality.js" type="text/javascript"></script> -->
+    <script src="/static/geojson/mapa_srb_mun.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.css" />
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.Default.css" />
     <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
@@ -68,16 +69,16 @@
 <body>
     <div>
         <img class="logo" src="data:image/jpeg;base64,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" alt="UNDP logo">
-        <h1 style="float:right;">UNDP MUNICIPALITY ACTIVITY MAP 2018</h1>
+        <h1 style="float:right;">UNDP IN SERBIA</h1>
     </div>
 
 
     <div class="sdg-color-lone" align="middle"></div>
-    <div style="display:flex;">
+    <div style="display:flex; width: 100%;">
         <div class="controlers">
             <div class="filter-main">
-                <div class="filter-title">TOPIC</div>
-                <div class="filter-content" action="" id="topics">
+                <button class="filter-title collapsible active">BY AREA</button>
+                <div class="filter-content collapsible-content" action="" id="topics">
                     <label  class="option"><p><input checked="checked" type="radio" value="0" name="topics" onclick="onOptionChange()">Show All</p></label>
                     {% for topic in topics %}
                     <label  class="option"><p><input type="radio" value={{ topic.id }} name="topics" onclick="onOptionChange()">{{ topic.name }}</p></label>
@@ -86,16 +87,26 @@
             </div>
 
             <div class="filter-main">
-                <div class="filter-title">CATEGORY</div>
-                <div class="filter-content" action="">
-                    <label  class="option"><p><input checked="checked" type="radio" value="0" name="categories" onclick="onOptionChange()">Show All</p></label>
+                <button class="filter-title collapsible active">BY CATEGORY</button>
+                <div class="filter-content collapsible-content" action="">
+                    <!-- <label  class="option"><p><input checked="checked" type="checkbox" value="0" name="categories" onclick="onOptionChange()">Show All</p></label> -->
                     {% for category in categories %}
-                    <label  class="option"><p><input type="radio" value={{ category.id }} name="categories" onclick="onOptionChange()">{{ category.name }}</p></label>
+                    <label  class="option"><p><input type="checkbox" value={{ category.id }} name="categories" onclick="onOptionChange()">{{ category.name }}</p></label>
                     {% endfor %}
                 </div>
             </div>
 
-            <div class="filter">
+            <div class="filter-main">
+                <button class="filter-title collapsible active">BY SDG</button>
+                <div class="filter-content collapsible-content" action="">
+                    <label  class="option"><p><input checked="checked" type="radio" value="0" name="sdgs" onclick="onOptionChange()">Show All</p></label>
+                    {% for sdg in sdgs %}
+                    <label  class="option"><p><input type="radio" value={{ sdg.id }} name="sdgs" onclick="onOptionChange()">{{ sdg.name }}</p></label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- <div class="filter">
                 <div class="filter-title">SDG</div>
                 <div class="sdgselector filter-content">
                     {% for sdg in sdgs %}
@@ -109,7 +120,7 @@
                         <label title="Sustainable Development Goals" class="sdgimage sdg-0" for="sdg-0"></label>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
        {% leaflet_map "main" %}
         <div id="sidebar">
@@ -126,15 +137,28 @@
 
     function onOptionChange() {
 
+ 
         var topic = document.querySelector('input[name=topics]:checked').value;
         var sdg = document.querySelector('input[name=sdgs]:checked').value;
-        var category = document.querySelector('input[name=categories]:checked').value;
+        //var category = document.querySelector('input[name=categories]:checked').value;
+
+        var categories = document.getElementsByName('categories');
+
+        var checkboxesChecked = [];
+
+        for (var i=0; i<categories.length; i++) {
+            if (categories[i].checked) {
+                checkboxesChecked.push(categories[i].value);
+            }
+        }
+
+        console.log('Categories', encodeURIComponent(checkboxesChecked));
 
         var url = '/api/activities/?';
         var params = {};
         if (topic != 0) { params.topic = topic };
         if (sdg != 0) { params.sdg = sdg };
-        if (category != 0) { params.category = category };
+        if (checkboxesChecked.length != 0) { params.category_in = checkboxesChecked };
 
         var query = Object.keys(params)
             .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
@@ -169,18 +193,18 @@
             }
         }
 
-        if (match === true) return 'rgb(0, 54, 128)'
+        if (match === true) return 'rgba(0, 54, 128, 0.6)'
         else
-            return '#000'
+            return 'rgba(0,0,0, 0.3)'
     }
 
     function style(feature) {
         return {
             weight: 1,
             opacity: 1,
-            color: 'rgb(255, 255, 255)',
+            color: '#fff',
             dashArray: '',
-            fillOpacity: 0.5,
+            fillOpacity: 1,
             fillColor: getFillColor(feature.properties.NAME_2)//'rgb(0, 54, 128)'
         };
     }
@@ -194,20 +218,24 @@
     function setMarkers(map, data) {
         markers = L.markerClusterGroup({
             showCoverageOnHover: false,
+            spiderfyOnMaxZoom: false,
             singleMarkerMode: true
         });
 
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             var title = item.topic.name + ' - ' + item.category.name + ': ' + item.project_name;
-            var marker = L.marker(new L.LatLng(item.location.latitude, item.location.longitude), { project: item, title: title });
+            var marker = L.marker(new L.LatLng(item.sublocation.latitude, item.sublocation.longitude), { project: item, title: title });
             marker.on('click', markerClick);
             markers.addLayer(marker);
-            marker.bindPopup("<b>" + item.project_name + "</b>", {
-                "autoClose": false,
-                "closeOnClick": false
-            });
+            // marker.bindPopup("<b>" + item.project_name + "</b>", {
+            //     "autoClose": false,
+            //     "closeOnClick": false
+            // });
         }
+
+        markers.on('clusterclick', clusterGroupClick);
+
         map.addLayer(markers);
     }
 
@@ -224,10 +252,14 @@
             sidebar.hide();
         }, 300);
 
-        var html = '<h2 class="title">' + layer.options.project.project_name + '</h2><hr>';
-            html += '<div class="separator space">';
+        var html = '';
+
             html += '<img src="/static/images/marker-icon.png" width="18px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + layer.options.project.location.name + '</h3>';
-            html += '</div>';
+            html += '<hr>'
+            html += '<div class="project-info">'
+            html += '<div class="title project-title">' + layer.options.project.specific_activity + '</div>';
+            // html += '<div class="separator space">';
+            // html += '</div>';
 
             // html += '<div>Topic: ' + layer.options.project.topic.name + '</div>';
             // html += '<div>Catgory: ' + layer.options.project.category.name + '</div>';
@@ -240,29 +272,121 @@
             // html += '<div>Value: ' + layer.options.project.activity_value + '</div>';
             // html += '<div>Beneficiaries: ' + layer.options.project.beneficiaries + '</div>';
 
-            html += '<table class="separator space">';
+            html += '<table class="separator space filter-content">';
             // html += '<tr><th>SDG:<th><td><img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;"><td></tr>';
-            html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
-            html += '<tr><th>Catgory:<th><td>' + layer.options.project.category.name + '<td></tr>';
-            html += '<tr><th>Portfolio:<th><td>' + layer.options.project.portfolio + '<td></tr>';
-            html += '<tr><th>Cluster:<th><td>' + layer.options.project.cluster + '<td></tr>';
-            html += '<tr><th>Activity:<th><td>' + layer.options.project.specific_activity + '<td></tr>';
+            html += '<tr><th>Donors:<th><td>' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '<td></tr>';
+            // html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
+            // html += '<tr><th>Category:<th><td>' + layer.options.project.category.name + '<td></tr>';
+            // html += '<tr><th>Portfolio:<th><td>' + layer.options.project.portfolio + '<td></tr>';
+            // html += '<tr><th>Cluster:<th><td>' + layer.options.project.cluster + '<td></tr>';
+            // html += '<tr><th>Activity:<th><td>' + layer.options.project.specific_activity + '<td></tr>';
+            var value = (layer.options.project.activity_value.length > 0) ? layer.options.project.activity_value + ' USD': '';
+
+            html += '<tr><th>Value:<th><td>' + value.toLocaleString('en') + '<td></tr>';
+
             html += '<tr><th>Start date:<th><td>' + layer.options.project.start_date + '<td></tr>';
             html += '<tr><th>End date:<th><td>' + layer.options.project.end_date + '<td></tr>';
-            html += '<tr><th>Donors:<th><td>' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '<td></tr>';
-            html += '<tr><th>Value:<th><td>' + layer.options.project.activity_value + '<td></tr>';
-            html += '<tr><th>Beneficiaries:<th><td>' + layer.options.project.beneficiaries + '<td></tr>';
+            html += '<tr><th>Project Name:<th><td>' + layer.options.project.project_name + '<td></tr>';
+            
+            var beneficiaries = parseInt(layer.options.project.beneficiaries);
+            html += '<tr><th>Beneficiaries:<th><td>' + (isNaN(beneficiaries) ? '' : beneficiaries.toLocaleString('en')) + '<td></tr>';
 
             html += '</table>';
 
             html += '<div class="space">';
-            html += '<img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + layer.options.project.sdg.name + '</h3>';
+            html += '<img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="24px" style="vertical-align: middle;"><h4 style="display:inline;margin:10px;">' + layer.options.project.sdg.name + '</h4>';
             html += '</div>';
-
+            html += '</div>';
+            
         setTimeout(function () {
             sidebar.setContent(html);
             sidebar.show();
+            document.getElementsByClassName("leaflet-sidebar")[0].style.height = 'auto'
         }, 700);
+    }
+
+    function clusterGroupClick(e) {
+        var cluster = e.layer,
+		    bottomCluster = cluster;
+
+		while (bottomCluster._childClusters.length === 1) {
+			bottomCluster = bottomCluster._childClusters[0];
+		}
+
+		if (bottomCluster._zoom === this._maxZoom &&
+			bottomCluster._childCount === cluster._childCount) {
+
+            setTimeout(function () {
+                sidebar.hide();
+            }, 300);    
+
+            var childClusters = cluster.getAllChildMarkers();
+
+            var html = ''    
+            html += '<img src="/static/images/marker-icon.png" width="18px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + childClusters[0].options.project.location.name + '</h3>';
+            html += '<hr>';
+
+        for (var i in childClusters) {
+
+            html += '<div class="project-info">'
+            html += '<div class="title project-title">' + childClusters[i].options.project.specific_activity + '</div>';
+            // html += '<div class="separator space">';
+            // // html += '<div class="separator space">';
+            // // html += '<img src="/static/images/marker-icon.png" width="18px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + childClusters[i].options.project.location.name + '</h3>';
+            // html += '</div>';
+
+            // html += '<div>Topic: ' + layer.options.project.topic.name + '</div>';
+            // html += '<div>Catgory: ' + layer.options.project.category.name + '</div>';
+            // html += '<div>Portfolio: ' + layer.options.project.portfolio + '</div>';
+            // html += '<div>Cluster: ' + layer.options.project.cluster + '</div>';
+            // html += '<div>Activity: ' + layer.options.project.specific_activity + '</div>';
+            // html += '<div>Start date: ' + layer.options.project.start_date + '</div>';
+            // html += '<div>End date: ' + layer.options.project.end_date + '</div>';
+            // html += '<div>Donors: ' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '</div>';
+            // html += '<div>Value: ' + layer.options.project.activity_value + '</div>';
+            // html += '<div>Beneficiaries: ' + layer.options.project.beneficiaries + '</div>';
+
+            html += '<table class="separator space filter-content">';
+            // html += '<tr><th>SDG:<th><td><img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;"><td></tr>';
+            html += '<tr><th>Donors:<th><td>' + childClusters[i].options.project.donor_1 + childClusters[i].options.project.donor_2 + childClusters[i].options.project.donor_3 + '<td></tr>';
+            // html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
+            // html += '<tr><th>Category:<th><td>' + layer.options.project.category.name + '<td></tr>';
+            // html += '<tr><th>Portfolio:<th><td>' + layer.options.project.portfolio + '<td></tr>';
+            // html += '<tr><th>Cluster:<th><td>' + layer.options.project.cluster + '<td></tr>';
+            // html += '<tr><th>Activity:<th><td>' + layer.options.project.specific_activity + '<td></tr>';
+
+            var value = (childClusters[i].options.project.activity_value.length > 0) ? childClusters[i].options.project.activity_value + ' USD': '';
+
+            html += '<tr><th>Value:<th><td>' + value.toLocaleString('en') + '<td></tr>';
+            html += '<tr><th>Start date:<th><td>' + childClusters[i].options.project.start_date + '<td></tr>';
+            html += '<tr><th>End date:<th><td>' + childClusters[i].options.project.end_date + '<td></tr>';
+            html += '<tr><th>Project Name:<th><td>' + childClusters[i].options.project.project_name + '<td></tr>';
+
+            var beneficiaries = parseInt(childClusters[i].options.project.beneficiaries);
+
+            html += '<tr><th>Beneficiaries:<th><td>' + (isNaN(beneficiaries) ? '' : beneficiaries.toLocaleString('en')) + '<td></tr>';
+
+            html += '</table>';
+
+            html += '<div class="space">';
+            html += '<img src="/static/images/sdg-' + childClusters[i].options.project.sdg.id + '.png" width="24px" style="vertical-align: middle;"><h4 style="display:inline;margin:10px;">' + childClusters[i].options.project.sdg.name + '</h4>';
+            html += '</div>';
+            html += '</div>'
+
+
+            }
+
+
+            console.log('cluster group click');
+            setTimeout(function () {
+                sidebar.setContent(html);
+                sidebar.show();
+                if (childClusters.length > 2) document.getElementsByClassName("leaflet-sidebar")[0].style.height = '100%';
+                else document.getElementsByClassName("leaflet-sidebar")[0].style.height = 'auto';
+            }, 700);
+        }
+        
+
     }
 
     function isMarkerInsidePolygon(marker, poly) {
@@ -315,6 +439,30 @@
                 console.log(error);
             })
     });
+</script>
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+            content.style.maxHeight = null;
+            } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            } 
+        });
+    }
+    
+    var contentElems = document.getElementsByClassName("collapsible-content");
+
+
+    for ( i=0; i < contentElems.length; i++ ) {
+        contentElems[i].style.maxHeight = contentElems[i].scrollHeight + "px";
+    }
+
 </script>
 <script src="/static/js/sidebar.js"></script>
 </html>

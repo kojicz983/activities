@@ -8,7 +8,7 @@ from django.shortcuts import render
 from rest_framework import serializers, viewsets
 
 from django_filters.rest_framework import DjangoFilterBackend
-from django_filters import FilterSet, RangeFilter
+from django_filters import FilterSet, RangeFilter, BaseInFilter, NumberFilter
 
 from .models import Activities, Location, Category, Topic, SDG
 
@@ -39,6 +39,7 @@ class SDGSerializer(serializers.ModelSerializer):
 
 class ActivitiesSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
+    sublocation = LocationSerializer()
     category = CategorySerializer()
     topic = TopicSerializer()
     sdg = SDGSerializer()
@@ -47,13 +48,16 @@ class ActivitiesSerializer(serializers.ModelSerializer):
         model = Activities
         fields = '__all__'
 
+class NumberInFilter(BaseInFilter, NumberFilter):
+    pass
 
 class ActivitiesFilter(FilterSet):
     activity_value = RangeFilter()
+    category_in = NumberInFilter(field_name='category', lookup_expr='in')
 
     class Meta:
         model = Activities
-        fields = ('sdg', 'topic', 'category', 'activity_value' )
+        fields = ('sdg', 'topic', 'category_in', 'activity_value' )
 
 
 class ActivitiesViewSet(viewsets.ModelViewSet):
@@ -68,7 +72,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['topics'] = Topic.objects.filter(id__in=self.queryset.values('topic').distinct())
-        context['categories'] = Category.objects.filter(id__in=self.queryset.values('category').distinct())
-        context['sdgs'] = SDG.objects.filter(id__in=self.queryset.values('sdg').distinct())
+        context['topics'] = Topic.objects.all() #filter(id__in=self.queryset.values('topic').distinct())
+        context['categories'] = Category.objects.all() #.filter(id__in=self.queryset.values('category').distinct())
+        context['sdgs'] = SDG.objects.all() #filter(id__in=self.queryset.values('sdg').distinct())
         return context
