@@ -1,26 +1,29 @@
 .marker-cluster-small {
-	background-color: rgba(181, 226, 140, 0.4);
+	/*e6223d */
+	background-color: rgba(181, 226, 140, 0.6);
 	}
 .marker-cluster-small div {
-	background-color: rgba(110, 204, 57, 0.3);
+	background-color: rgba(110, 204, 57, 0.6);
 	}
 
 .marker-cluster-medium {
 	/* background-color: rgba(241, 211, 87, 0.6); */
-	background-color: rgba(181, 226, 140, 0.4);
+	background-color: rgba(181, 226, 140, 0.6);
+	/* background-color: rgba(38, 191, 231, 0.6); */
 	}
 .marker-cluster-medium div {
 	/* background-color: rgba(240, 194, 12, 0.6); */
-	background-color: rgba(110, 204, 57, 0.3);
+	background-color: rgba(110, 204, 57, 0.6);
+	/* background-color: rgba(31, 151, 213, 0.6); */
 	}
 
 .marker-cluster-large {
 	/* background-color: rgba(253, 156, 115, 0.6); */
-	background-color: rgba(181, 226, 140, 0.4);
+	background-color: rgba(181, 226, 140, 0.6);
 	}
 .marker-cluster-large div {
 	/* background-color: rgba(241, 128, 23, 0.6); */
-	background-color: rgba(110, 204, 57, 0.3);
+	background-color: rgba(110, 204, 57, 0.6);
 	}
 
 	/* IE 6-8 fallback colors */
