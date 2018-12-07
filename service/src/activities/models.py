@@ -32,13 +32,15 @@ class ActivitiesManager(models.Manager):
     def get_queryset(self):
         return super(ActivitiesManager, self).get_queryset()\
             .select_related('location')\
+            .select_related('sublocation')\
             .select_related('topic')\
             .select_related('sdg')\
             .select_related('category')
 
 
 class Activities(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='location')
+    sublocation = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, related_name='sublocation')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     sdg = models.ForeignKey(SDG, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -51,7 +53,7 @@ class Activities(models.Model):
     donor_1 = models.CharField(null=True, blank=False, max_length=50)
     donor_2 = models.CharField(null=True, blank=True, max_length=50)
     donor_3 = models.CharField(null=True, blank=True, max_length=50)
-    activity_value = models.IntegerField()
+    activity_value = models.CharField(null=True, blank=True, max_length=50)
     beneficiaries = models.CharField(null=True, blank=True, max_length=50)
 
     objects = ActivitiesManager()

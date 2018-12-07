@@ -21,13 +21,21 @@ class Command(BaseCommand):
 
         activity_list = []
         for index, row in df.iterrows():
-            location = Location.objects.get_or_create(name=row['Location'])[0]
+            category = row['Category (Activity Type, choose from drop down)']
+            location = Location.objects.get_or_create(name=row['Location'].lstrip().rstrip())[0]
+            sublocation = Location.objects.get_or_create(name=row['Sub-location (if any)'].lstrip().rstrip())[0]
+            tpc = row['Topic (choose from drop down)']
+            ctg = row['Category (Activity Type, choose from drop down)']
+            val = row['Activity Value']
+            self.stdout.write(self.style.SUCCESS(f'Topic: {tpc}'))
+            self.stdout.write(self.style.SUCCESS(f'Value: {val}'))
             activity_list.append(
                 Activities(
                     location=location,
-                    topic=Topic.objects.get(name=row['Topic (choose from drop down)']),
-                    sdg=SDG.objects.get(name=row['SDG (choose from drop down)']),
-                    category=Category.objects.get(name=row['Category (Activity Type, choose from drop down)']),
+                    sublocation=sublocation,
+                    topic=Topic.objects.get(name=row['Topic (choose from drop down)'].lstrip().rstrip()),
+                    sdg=SDG.objects.get(name=row['SDG (choose from drop down)'].lstrip().rstrip()),
+                    category=Category.objects.get(name=row['Category (Activity Type, choose from drop down)'].lstrip().rstrip()),
                     project_name=row['Project Name'],
                     portfolio=row['Portfolio'],
                     cluster=row['Cluster'],
@@ -41,7 +49,7 @@ class Command(BaseCommand):
                     end_date=row['End date or Ongoing']
                 )
             )
-
+        self.stdout.write(self.style.SUCCESS(f'Start'))
         Activities.objects.bulk_create(activity_list)
 
 
