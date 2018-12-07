@@ -65,13 +65,13 @@ categories:
 	from activities.models import Category; \
 	Category.objects.create(name='Technical Documentation'); \
 	Category.objects.create(name='Research (Studies and Analysis)'); \
-	Category.objects.create(name='Infrastructure works (e.g. sewage, CHPs, NAPA, FoN etc.)'); \
-	Category.objects.create(name='Employment (e.g. LTAs, Roma UNV, IT Trainings)'); \
-	Category.objects.create(name='Private Sector support (start-ups, agribusiness)'); \
-	Category.objects.create(name='Institution Building (e.g. parliament, mobile committee sessions, IT Council, PIMO, RSA)'); \
-	Category.objects.create(name='Capacity development (e.g. various study tours and trainings, auditors, intersectoral working groups etc.)'); \
-	Category.objects.create(name='Expert support (e.g. DU, Belgrade)'); \
-	Category.objects.create(name='Normative support (for preparation or implementation of any law or bylaw e.g. VaW, open data?)'); \
+	Category.objects.create(name='Infrastructure works'); \
+	Category.objects.create(name='Employment'); \
+	Category.objects.create(name='Private Sector support'); \
+	Category.objects.create(name='Institution Building'); \
+	Category.objects.create(name='Capacity development'); \
+	Category.objects.create(name='Expert support'); \
+	Category.objects.create(name='Normative support'); \
 	Category.objects.create(name='Innovative solutions');"
 
 ## Import data
