@@ -852,19 +852,18 @@ var MarkerClusterGroup = L.MarkerClusterGroup = L.FeatureGroup.extend({
 
 	_zoomOrSpiderfy: function (e) {
 		var cluster = e.layer,
-		    bottomCluster = cluster;
+			bottomCluster = cluster;
+		
+		var continueZoom = true;
 
-		while (bottomCluster._childClusters.length === 1) {
-			bottomCluster = bottomCluster._childClusters[0];
-		}
+		if(bottomCluster._zoom < this._maxZoom && bottomCluster._markers.length === bottomCluster._childCount) continueZoom = false;
 
 		if (bottomCluster._zoom === this._maxZoom &&
 			bottomCluster._childCount === cluster._childCount &&
 			this.options.spiderfyOnMaxZoom) {
-
-			// All child markers are contained in a single cluster from this._maxZoom to this cluster.
 			cluster.spiderfy();
-		} else if (this.options.zoomToBoundsOnClick) {
+		} else if ( bottomCluster._zoom < this._maxZoom &&
+			this.options.zoomToBoundsOnClick) {
 			cluster.zoomToBounds();
 		}
 
