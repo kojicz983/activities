@@ -115,7 +115,7 @@ h1 {
 }
 
 .project-info {
-    /* border-radius: 12px; */
+    border-radius: 4px;
     font-family: ProximaNova, sans-serif;
     border: 2px solid #E2E2E2;
     background: #e8e8e8;
@@ -125,13 +125,19 @@ h1 {
 
 .project-title {
     /* width: 100%; */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     font-family: ProximaNova, sans-serif;
     background: #0265b5;
     font-size: 1.5rem;
     color: white;
-    padding: 5px 0px 5px 5px;
+    padding: 8px 8px 8px 8px;
 }
 
 .leaflet-control-attribution {
     display: none !important;
+}
+
+.sdg-img {
+    padding-left: 10px;
 }
