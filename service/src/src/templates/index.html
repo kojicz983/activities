@@ -192,10 +192,9 @@
                 break;
             }
         }
-
         if (match === true) return 'rgba(0, 54, 128, 0.6)'
         else
-            return 'rgba(0,0,0, 0.3)'
+            return 'rgba(0, 54, 128, 0.4)'
     }
 
     function style(feature) {
@@ -258,22 +257,8 @@
             html += '<hr>'
             html += '<div class="project-info">'
             html += '<div class="title project-title">' + layer.options.project.specific_activity + '</div>';
-            // html += '<div class="separator space">';
-            // html += '</div>';
-
-            // html += '<div>Topic: ' + layer.options.project.topic.name + '</div>';
-            // html += '<div>Catgory: ' + layer.options.project.category.name + '</div>';
-            // html += '<div>Portfolio: ' + layer.options.project.portfolio + '</div>';
-            // html += '<div>Cluster: ' + layer.options.project.cluster + '</div>';
-            // html += '<div>Activity: ' + layer.options.project.specific_activity + '</div>';
-            // html += '<div>Start date: ' + layer.options.project.start_date + '</div>';
-            // html += '<div>End date: ' + layer.options.project.end_date + '</div>';
-            // html += '<div>Donors: ' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '</div>';
-            // html += '<div>Value: ' + layer.options.project.activity_value + '</div>';
-            // html += '<div>Beneficiaries: ' + layer.options.project.beneficiaries + '</div>';
 
             html += '<table class="separator space filter-content">';
-            // html += '<tr><th>SDG:<th><td><img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;"><td></tr>';
             html += '<tr><th>Donors:<th><td>' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '<td></tr>';
             // html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
             // html += '<tr><th>Category:<th><td>' + layer.options.project.category.name + '<td></tr>';
@@ -330,30 +315,8 @@
 
             html += '<div class="project-info">'
             html += '<div class="title project-title">' + childClusters[i].options.project.specific_activity + '</div>';
-            // html += '<div class="separator space">';
-            // // html += '<div class="separator space">';
-            // // html += '<img src="/static/images/marker-icon.png" width="18px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + childClusters[i].options.project.location.name + '</h3>';
-            // html += '</div>';
-
-            // html += '<div>Topic: ' + layer.options.project.topic.name + '</div>';
-            // html += '<div>Catgory: ' + layer.options.project.category.name + '</div>';
-            // html += '<div>Portfolio: ' + layer.options.project.portfolio + '</div>';
-            // html += '<div>Cluster: ' + layer.options.project.cluster + '</div>';
-            // html += '<div>Activity: ' + layer.options.project.specific_activity + '</div>';
-            // html += '<div>Start date: ' + layer.options.project.start_date + '</div>';
-            // html += '<div>End date: ' + layer.options.project.end_date + '</div>';
-            // html += '<div>Donors: ' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '</div>';
-            // html += '<div>Value: ' + layer.options.project.activity_value + '</div>';
-            // html += '<div>Beneficiaries: ' + layer.options.project.beneficiaries + '</div>';
-
             html += '<table class="separator space filter-content">';
-            // html += '<tr><th>SDG:<th><td><img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="36px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;"><td></tr>';
             html += '<tr><th>Donors:<th><td>' + childClusters[i].options.project.donor_1 + childClusters[i].options.project.donor_2 + childClusters[i].options.project.donor_3 + '<td></tr>';
-            // html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
-            // html += '<tr><th>Category:<th><td>' + layer.options.project.category.name + '<td></tr>';
-            // html += '<tr><th>Portfolio:<th><td>' + layer.options.project.portfolio + '<td></tr>';
-            // html += '<tr><th>Cluster:<th><td>' + layer.options.project.cluster + '<td></tr>';
-            // html += '<tr><th>Activity:<th><td>' + layer.options.project.specific_activity + '<td></tr>';
 
             var value = (childClusters[i].options.project.activity_value.length > 0) ? childClusters[i].options.project.activity_value + ' USD': '';
 
