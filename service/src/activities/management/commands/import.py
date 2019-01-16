@@ -27,7 +27,8 @@ class Command(BaseCommand):
             tpc = row['Topic (choose from drop down)']
             ctg = row['Category (Activity Type, choose from drop down)']
             val = row['Activity Value']
-            self.stdout.write(self.style.SUCCESS(f'Topic: {tpc}'))
+            self.stdout.write(self.style.SUCCESS(f'Location: {location}'))
+            self.stdout.write(self.style.SUCCESS(f'Category: {ctg}'))
             self.stdout.write(self.style.SUCCESS(f'Value: {val}'))
             activity_list.append(
                 Activities(

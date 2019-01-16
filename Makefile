@@ -64,7 +64,7 @@ categories:
 	docker-compose exec service python manage.py shell -c "\
 	from activities.models import Category; \
 	Category.objects.create(name='Technical Documentation'); \
-	Category.objects.create(name='Research (Studies and Analysis)'); \
+	Category.objects.create(name='Research'); \
 	Category.objects.create(name='Infrastructure works'); \
 	Category.objects.create(name='Employment'); \
 	Category.objects.create(name='Private Sector support'); \
@@ -72,7 +72,8 @@ categories:
 	Category.objects.create(name='Capacity development'); \
 	Category.objects.create(name='Expert support'); \
 	Category.objects.create(name='Normative support'); \
-	Category.objects.create(name='Innovative solutions');"
+	Category.objects.create(name='Innovative solutions'); \
+	Category.objects.create(name='Equipment');"
 
 ## Import data
 import-data:
