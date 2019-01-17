@@ -50,12 +50,12 @@ topics:
 	from activities.models import Topic; \
 	Topic.objects.create(name='Poverty Reduction'); \
 	Topic.objects.create(name='E-Governance'); \
-	Topic.objects.create(name='Parliaments'); \
+	Topic.objects.create(name='Parliamentary Development'); \
 	Topic.objects.create(name='Public Finance Management'); \
 	Topic.objects.create(name='Vulnerable groups'); \
 	Topic.objects.create(name='Gender Equality'); \
 	Topic.objects.create(name='Energy Efficiency and Renewable Energy'); \
-	Topic.objects.create(name='Climate-change'); \
+	Topic.objects.create(name='Climate Change'); \
 	Topic.objects.create(name='Environment'); \
 	Topic.objects.create(name='Local Municipal Resilience and Disaster Risk Reduction');"
 
