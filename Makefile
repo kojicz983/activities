@@ -2,15 +2,12 @@
 
 
 DATABASE_NAME := activities
-SQL_NAME := $(shell date +%d.%m.%Y_%H:%M)
+SQL_NAME := $(shell date +%d.%m.%Y_%H.%M)
 SQL_PATH := sql/activities_$(SQL_NAME).sql.gz
 
 ## Initialize project
 init:
-	docker-compose build          &&\
-	docker-compose up -d postgres &&\
-	sh ./wait-for-postgres.sh     &&\
-	docker-compose up -d
+	docker-compose up -d --build
 
 ## Delete all
 clean:
@@ -20,7 +17,7 @@ clean:
 
 ## Boot project
 boot: clean init
-	google-chrome http://0.0.0.0:8000/ &&\
+	google-chrome http://0.0.0.0/ &&\
 	$(MAKE) logs
 
 ## Find geo locations
