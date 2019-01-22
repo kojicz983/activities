@@ -16,7 +16,7 @@ clean:
 	exit 0
 
 ## Boot project
-boot: clean init
+boot: dump clean init
 	google-chrome http://0.0.0.0/ &&\
 	$(MAKE) logs
 
@@ -29,4 +29,4 @@ logs:
 
 ## Dump database
 dump:
-	docker-compose exec postgres pg_dump -h localhost -U postgres ${DATABASE_NAME} | gzip > ${SQL_PATH}
+	docker-compose exec database pg_dump -h localhost -U postgres ${DATABASE_NAME} | gzip > ${SQL_PATH}
