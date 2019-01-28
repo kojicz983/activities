@@ -145,7 +145,7 @@ LEAFLET_CONFIG = {
     'SPATIAL_EXTENT': (14.6564400,46.3496400, 28.3564400,  42.0496400),
     'DEFAULT_CENTER': (45.008248, 20.914047),
     'DEFAULT_ZOOM': 8,
-    'MIN_ZOOM': 7,
+    'MIN_ZOOM': 8,
     'MAX_ZOOM': 17,
     'TILES': 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
 }
