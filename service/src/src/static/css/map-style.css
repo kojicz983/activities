@@ -141,3 +141,44 @@ h1 {
 .sdg-img {
     padding-left: 10px;
 }
+
+footer {
+    -webkit-box-flex: 0;
+    flex: 0 0 auto;
+    background-color: #0265b5;
+    color: #fefefe !important;
+    font-family: ProximaNova, sans-serif;
+    font-size: .75rem;
+    letter-spacing: .5px;
+}
+
+.nav-footer {
+    background-color: #0265b5;
+}
+
+.row {
+    /* max-width: 75rem; */
+    margin-right: auto;
+    margin-left: 5px;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-flow: row wrap;
+}
+
+.copyright {
+    order: 1;
+    flex: 0 0 21%;
+    max-width: 21%;
+}
+
+.disclaimer {
+    order: 2;
+    flex: 0 0 79%;
+    max-width: 79%;
+}
+
+.align-middle {
+    -webkit-box-align: center;
+    align-items: center;
+}

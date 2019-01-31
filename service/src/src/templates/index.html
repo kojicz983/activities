@@ -129,6 +129,23 @@
         </div>
     </div>
 </body>
+<footer>
+    <nav class="nav-footer">
+        <div class="row align-middle">
+            <div class="copyright">
+                <p>
+           
+                    © 
+                    2019
+                     
+                    United Nations Development Programme</p>
+            </div>
+            <div class="disclaimer">
+                <p><i>The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations or UNDP concerning the legal status of any country, territory, city or area or its authorities, or concerning the delimitation of its frontiers or boundaries.</i></p>
+            </div>
+        </div>
+    </nav>
+</footer>
 <script type="text/javascript">
 
     var projects = null;
@@ -289,7 +306,7 @@
             sidebar.setContent(html);
             sidebar.show();
             document.getElementsByClassName("leaflet-sidebar")[0].style.height = 'auto'
-        }, 700);
+        }, 300);
     }
 
     function clusterGroupClick(e) {
@@ -348,7 +365,7 @@
                 sidebar.show();
                 if (childClusters.length > 2) document.getElementsByClassName("leaflet-sidebar")[0].style.height = '100%';
                 else document.getElementsByClassName("leaflet-sidebar")[0].style.height = 'auto';
-            }, 700);
+            }, 300);
         }
         
 
@@ -427,6 +444,8 @@
     for ( i=0; i < contentElems.length; i++ ) {
         contentElems[i].style.maxHeight = contentElems[i].scrollHeight + "px";
     }
+
+    document.addEventListener('contextmenu', event => event.preventDefault());
 
 </script>
 <script src="/static/js/sidebar.js"></script>
