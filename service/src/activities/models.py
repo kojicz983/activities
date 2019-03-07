@@ -27,6 +27,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Donor(models.Model):
+    name = models.CharField(null=False, blank=False, max_length=150, unique=True)
+
+    def __str__(self):
+        return self.name
+
 
 class ActivitiesManager(models.Manager):
     def get_queryset(self):
@@ -36,6 +42,9 @@ class ActivitiesManager(models.Manager):
             .select_related('topic')\
             .select_related('sdg')\
             .select_related('category')
+            .select_related('donor_1')
+            .select_related('donor_2')
+            .select_related('donor_3')
 
 
 class Activities(models.Model):
@@ -50,9 +59,9 @@ class Activities(models.Model):
     specific_activity = models.CharField(null=False, blank=False, max_length=300)
     start_date = models.CharField(null=False, blank=False, max_length=50)
     end_date = models.CharField(null=True, blank=True, max_length=50)
-    donor_1 = models.CharField(null=True, blank=False, max_length=50)
-    donor_2 = models.CharField(null=True, blank=True, max_length=50)
-    donor_3 = models.CharField(null=True, blank=True, max_length=50)
+    donor_1 = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, related_name='donor_1')
+    donor_2 = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, related_name='donor_2')
+    donor_3 = models.ForeignKey(Donor, on_delete=models.CASCADE, null=True, related_name='donor_3')
     activity_value = models.CharField(null=True, blank=True, max_length=50)
     beneficiaries = models.CharField(null=True, blank=True, max_length=50)
 

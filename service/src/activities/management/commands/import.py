@@ -5,7 +5,7 @@ import numpy
 from datetime import datetime
 from django.core.management.base import BaseCommand, CommandError
 
-from activities.models import Activities, Location, Topic, Category, SDG
+from activities.models import Activities, Location, Topic, Category, SDG, Donor
 
 
 class Command(BaseCommand):
@@ -29,7 +29,6 @@ class Command(BaseCommand):
             val = row['Activity Value']
             self.stdout.write(self.style.SUCCESS(f'Location: {location}'))
             self.stdout.write(self.style.SUCCESS(f'Category: {ctg}'))
-            self.stdout.write(self.style.SUCCESS(f'Topic: {tpc}'))
             self.stdout.write(self.style.SUCCESS(f'Value: {val}'))
             activity_list.append(
                 Activities(
@@ -42,9 +41,9 @@ class Command(BaseCommand):
                     portfolio=row['Portfolio'],
                     cluster=row['Cluster'],
                     specific_activity=row['Specific Activity (restricted to 140 chars)'],
-                    donor_1=row['Donor 1 (choose from drop down)'],
-                    donor_2=row['Donor 2 (choose from drop down)'],
-                    donor_3=row['Donor 3 (choose from drop down)'],
+                    donor_1=Donor.objects.get_or_create(name=row['Donor 1 (choose from drop down)']).lstrip().rstrip(),
+                    donor_2=Donor.objects.get_or_create(name=row['Donor 2 (choose from drop down)']).lstrip().rstrip(),
+                    donor_3=Donor.objects.get_or_create(name=row['Donor 3 (choose from drop down)']).lstrip().rstrip(),
                     activity_value=row['Activity Value'],
                     beneficiaries=row['Beneficiaries'],
                     start_date=row['Start Date'],

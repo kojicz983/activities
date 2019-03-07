@@ -10,7 +10,7 @@ from rest_framework import serializers, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import FilterSet, RangeFilter, BaseInFilter, NumberFilter
 
-from .models import Activities, Location, Category, Topic, SDG
+from .models import Activities, Location, Category, Topic, SDG, Donor
 
 # Create your views here.
 class LocationSerializer(serializers.ModelSerializer):
@@ -75,4 +75,5 @@ class IndexView(TemplateView):
         context['topics'] = Topic.objects.all() #filter(id__in=self.queryset.values('topic').distinct())
         context['categories'] = Category.objects.all() #.filter(id__in=self.queryset.values('category').distinct())
         context['sdgs'] = SDG.objects.all() #filter(id__in=self.queryset.values('sdg').distinct())
+        context['donors'] = Donor.objects.all()
         return context
