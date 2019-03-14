@@ -1,7 +1,5 @@
 ﻿init:
 	docker-compose build          &&\
-	docker-compose up -d postgres &&\
-	sh ./wait-for-postgres.sh     &&\
 	docker-compose up -d
 
 clean:
@@ -14,11 +12,11 @@ boot: clean init migrations superuser sdgs topics categories import-data
 	$(MAKE) logs
 
 migrations:
-	docker-compose exec service bash -c "python manage.py makemigrations && python manage.py migrate"
+	docker-compose exec app bash -c "python manage.py makemigrations && python manage.py migrate"
 
 ## Reset super user
 superuser:
-	docker-compose exec service python manage.py shell -c "\
+	docker-compose exec app python manage.py shell -c "\
 	from django.contrib.auth.models import User; \
 	User.objects.create_superuser('admin', 'admin@example.com', 'password123');"
 
