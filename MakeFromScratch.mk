@@ -1,4 +1,4 @@
-init:
+﻿init:
 	docker-compose build          &&\
 	docker-compose up -d postgres &&\
 	sh ./wait-for-postgres.sh     &&\
@@ -24,7 +24,7 @@ superuser:
 
 ## SDG
 sdgs:
-	docker-compose exec service python manage.py shell -c "\
+	docker-compose exec app python manage.py shell -c "\
 	from activities.models import SDG; \
 	SDG.objects.create(name='GOAL 1: No Poverty'); \
 	SDG.objects.create(name='GOAL 2: Zero Hunger'); \
@@ -46,7 +46,7 @@ sdgs:
 
 ## topics
 topics:
-	docker-compose exec service python manage.py shell -c "\
+	docker-compose exec app python manage.py shell -c "\
 	from activities.models import Topic; \
 	Topic.objects.create(name='Poverty Reduction'); \
 	Topic.objects.create(name='E-Governance'); \
@@ -61,7 +61,7 @@ topics:
 
 ## categories
 categories:
-	docker-compose exec service python manage.py shell -c "\
+	docker-compose exec app python manage.py shell -c "\
 	from activities.models import Category; \
 	Category.objects.create(name='Technical Documentation'); \
 	Category.objects.create(name='Research'); \
@@ -77,11 +77,11 @@ categories:
 
 ## Import data
 import-data:
-	docker-compose exec service python manage.py import
+	docker-compose exec app python manage.py import
 
 ## Find geo locations
 findgeo:
-	docker-compose exec service python manage.py findgeo
+	docker-compose exec app python manage.py findgeo
 
 logs:
 	docker-compose logs -f
