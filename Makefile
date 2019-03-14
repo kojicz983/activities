@@ -2,14 +2,14 @@
 
 ## Initialize project
 init:
-	docker-compose up -d --build
+	docker-compose up -d
 
 clean:
 	docker-compose kill;                     \
 	docker-compose down -v --remove-orphans; \
 	exit 0
 
-boot: clean init migrations superuser sdgs topics categories import-data
+boot: clean init migrations superuser sdgs topics categories import-data findgeo
 	google-chrome http://0.0.0.0/ &&\
 	$(MAKE) logs
 
