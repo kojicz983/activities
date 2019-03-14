@@ -1,4 +1,4 @@
-﻿.PHONY: init clean boot migrations superuser sdgs topics categories import-data findgeo logs dump
+﻿﻿.PHONY: init clean boot migrations superuser sdgs topics categories import-data findgeo logs dump
 
 ## Initialize project
 init:
