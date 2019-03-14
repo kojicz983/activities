@@ -22,8 +22,8 @@ class Command(BaseCommand):
         activity_list = []
         for index, row in df.iterrows():
             category = row['Category (Activity Type, choose from drop down)']
-            location = Location.objects.get_or_create(name=row['Location'].lstrip().rstrip())[0]
-            sublocation = Location.objects.get_or_create(name=row['Sub-location (if any)'].lstrip().rstrip())[0]
+            location = Location.objects.get_or_create(name=row['Location'].strip())[0]
+            sublocation = Location.objects.get_or_create(name=row['Sub-location (if any)'].strip())[0]
             tpc = row['Topic (choose from drop down)']
             ctg = row['Category (Activity Type, choose from drop down)']
             val = row['Activity Value']
@@ -34,16 +34,16 @@ class Command(BaseCommand):
                 Activities(
                     location=location,
                     sublocation=sublocation,
-                    topic=Topic.objects.get(name=row['Topic (choose from drop down)'].lstrip().rstrip()),
-                    sdg=SDG.objects.get(name=row['SDG (choose from drop down)'].lstrip().rstrip()),
-                    category=Category.objects.get(name=row['Category (Activity Type, choose from drop down)'].lstrip().rstrip()),
+                    topic=Topic.objects.get(name=row['Topic (choose from drop down)'].strip()),
+                    sdg=SDG.objects.get(name=row['SDG (choose from drop down)'].strip()),
+                    category=Category.objects.get(name=row['Category (Activity Type, choose from drop down)'].strip()),
                     project_name=row['Project Name'],
                     portfolio=row['Portfolio'],
                     cluster=row['Cluster'],
                     specific_activity=row['Specific Activity (restricted to 140 chars)'],
-                    donor_1=Donor.objects.get_or_create(name=row['Donor 1 (choose from drop down)'].lstrip().rstrip())[0],
-                    donor_2=Donor.objects.get_or_create(name=row['Donor 2 (choose from drop down)'].lstrip().rstrip())[0],
-                    donor_3=Donor.objects.get_or_create(name=row['Donor 3 (choose from drop down)'].lstrip().rstrip())[0],
+                    donor_1=Donor.objects.get_or_create(name=row['Donor 1 (choose from drop down)'].strip())[0],
+                    donor_2=Donor.objects.get_or_create(name=row['Donor 2 (choose from drop down)'].strip())[0],
+                    donor_3=Donor.objects.get_or_create(name=row['Donor 3 (choose from drop down)'].strip())[0],
                     activity_value=row['Activity Value'],
                     beneficiaries=row['Beneficiaries'],
                     start_date=row['Start Date'],

@@ -10,7 +10,7 @@ clean:
 	exit 0
 
 boot: clean init migrations superuser sdgs topics categories import-data
-	google-chrome http://0.0.0.0:8000/ &&\
+	google-chrome http://0.0.0.0/ &&\
 	$(MAKE) logs
 
 migrations:
