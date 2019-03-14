@@ -36,6 +36,11 @@ class SDGSerializer(serializers.ModelSerializer):
         model = SDG
         fields = '__all__'
 
+class DonorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donor
+        fields = '__all__'
+
 
 class ActivitiesSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
@@ -43,6 +48,9 @@ class ActivitiesSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     topic = TopicSerializer()
     sdg = SDGSerializer()
+    donor_1 = DonorSerializer()
+    donor_2 = DonorSerializer()
+    donor_3 = DonorSerializer()
 
     class Meta:
         model = Activities
@@ -57,7 +65,7 @@ class ActivitiesFilter(FilterSet):
 
     class Meta:
         model = Activities
-        fields = ('sdg', 'topic', 'category_in', 'activity_value' )
+        fields = ('sdg', 'topic', 'donor_1', 'category_in', 'activity_value' )
 
 
 class ActivitiesViewSet(viewsets.ModelViewSet):
@@ -75,5 +83,5 @@ class IndexView(TemplateView):
         context['topics'] = Topic.objects.all() #filter(id__in=self.queryset.values('topic').distinct())
         context['categories'] = Category.objects.all() #.filter(id__in=self.queryset.values('category').distinct())
         context['sdgs'] = SDG.objects.all() #filter(id__in=self.queryset.values('sdg').distinct())
-        context['donors'] = Donor.objects.all()
+        context['donors'] = Donor.objects.all().order_by('name')
         return context

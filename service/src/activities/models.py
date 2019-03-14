@@ -41,9 +41,9 @@ class ActivitiesManager(models.Manager):
             .select_related('sublocation')\
             .select_related('topic')\
             .select_related('sdg')\
-            .select_related('category')
-            .select_related('donor_1')
-            .select_related('donor_2')
+            .select_related('category')\
+            .select_related('donor_1')\
+            .select_related('donor_2')\
             .select_related('donor_3')
 
 

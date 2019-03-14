@@ -9,10 +9,16 @@
     <script src="/static/geojson/mapa_srb_mun.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.css" />
     <link rel="stylesheet" href="/static/css/markercluster/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="/static/css/leaflet-search/leaflet-search.css" />
+    <!-- <link rel="stylesheet" href="/static/css/leaflet-search/leaflet-search.mobile.css" /> -->
     <script src="/static/js/markercluster/leaflet.markercluster-src.js"></script>
+    <script src="/static/js/leaflet-search/leaflet-search.js"></script>
     <link rel="stylesheet" href="/static/css/map-style.css" />
     <link rel="stylesheet" href="/static/css/sidebar.css" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Anton" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <style>
         .leaflet-container { 
             height: 1064px; 
@@ -97,7 +103,14 @@
                     {% endfor %}
                 </div>
             </div>
-
+            <div class="filter-main">
+                <button class="filter-title collapsible active">BY DONOR</button>
+                <input id="donors" name="donors"  class="custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left ui-autocomplete-input" autocomplete="off" title="">
+                <button id="showall" class="ui-button ui-widget ui-button-icon-only custom-combobox-toggle ui-corner-right" role="button" onclick="showAllSelection()">
+                    <span class="ui-button-icon ui-icon ui-icon-triangle-1-s"></span>
+                    <span class="ui-button-icon-space"> </span>
+                </button>
+            </div>
             <div class="filter-main">
                 <button class="filter-title collapsible active">BY SDG</button>
                 <div class="filter-content collapsible-content" action="">
@@ -148,11 +161,41 @@
 </footer>
 <script type="text/javascript">
 
+    var donors = [
+        {% for donor in donors %}
+            {label:"{{donor.name}}",
+             value:"{{donor.name}}",
+             id: {{donor.id}}
+            },
+        {%endfor %}
+    ];
+
+    $( "#donors" ).autocomplete({
+        source: donors,
+        minLength: 0,
+        // select: function( event, ui ) {
+        //     console.log('select');
+        //     onOptionChange();
+        // },
+        close: function (event, ui) {
+          var donor = document.querySelector('input[name=donors]').value;
+        
+//          if (donor.length == 0)
+            onOptionChange();  
+        },
+    });
+
+    var projectMunicipalities = null;
+    var searchLayer = null;
     var projects = null;
     var markers = null;
     var info = null;
     var map = null;
     var sidebar = null;
+
+    function showAllSelection() {
+        $( "#donors" ).autocomplete('search', '');
+    }
 
     function onOptionChange() {
 
@@ -160,6 +203,7 @@
         var topic = document.querySelector('input[name=topics]:checked').value;
         var sdg = document.querySelector('input[name=sdgs]:checked').value;
         //var category = document.querySelector('input[name=categories]:checked').value;
+        var donor = document.querySelector('input[name=donors]').value;
 
         var categories = document.getElementsByName('categories');
 
@@ -171,12 +215,20 @@
             }
         }
 
-        console.log('Categories', encodeURIComponent(checkboxesChecked));
-
         var url = '/api/activities/?';
         var params = {};
         if (topic != 0) { params.topic = topic };
         if (sdg != 0) { params.sdg = sdg };
+        if (donor != 0){
+            var donorId = 0;
+
+            for (var i in donors) {
+                if (donors[i].value == donor) {
+                    donorId = donors[i].id;
+                }
+            }
+            if (donorId != 0) params.donor_1 = donorId;
+        };
         if (checkboxesChecked.length != 0) { params.category_in = checkboxesChecked };
 
         var query = Object.keys(params)
@@ -198,9 +250,11 @@
                 clickable: true,
                 style: style,
                 // onEachFeature: onEachFeature
-            }).addTo(map);        }).catch(function (error) {
+            }).addTo(map);        
+            setSearchLayer();
+        }).catch(function (error) {
             console.log(error);
-        });
+            });
     }
 
     function getFillColor(municipality_name) {
@@ -233,6 +287,36 @@
         mapsPlaceholder.push(this);
     });
 
+    function setSearchLayer() {
+        searchLayer = new L.Control.Search({
+            layer: projectMunicipalities,
+            propertyName: 'NAME_2',
+            marker: false,
+            textPlaceholder: 'Go to city...',
+            collapsed: !1,
+            autoColapse: !1,
+            moveToLocation: function(latlng, title, map) {
+                //map.fitBounds( latlng.layer.getBounds() );
+                var zoom = map.getBoundsZoom(latlng.layer.getBounds());
+                map.setView(latlng, zoom); // access the zoom
+            }
+        });
+        searchLayer.on('search:locationfound', function(e) {
+            
+            //console.log('search:locationfound', );
+            //map.removeLayer(this._markerSearch)
+            e.layer.setStyle({fillColor: 'rgba(0, 54, 128, 0.75)', color: 'rgba(0, 54, 128, 0.75)'});
+            if(e.layer._popup)
+                e.layer.openPopup();
+        }).on('search:collapsed', function(e) {
+            projectMunicipalities.eachLayer(function(layer) {	//restore feature color
+                projectMunicipalities.resetStyle(layer);
+            });	
+        });
+        
+	    map.addControl( searchLayer );
+    }
+
     function setMarkers(map, data) {
         markers = L.markerClusterGroup({
             showCoverageOnHover: false,
@@ -260,6 +344,7 @@
     function deleteAllMarkers(map) {
         map.removeLayer(projectMunicipalities);
         map.removeLayer(markers);
+        map.removeControl(searchLayer);
     }
 
     function markerClick(e) {
@@ -278,7 +363,7 @@
             html += '<div class="title project-title">' + layer.options.project.specific_activity + '</div>';
 
             html += '<table class="separator space filter-content">';
-            html += '<tr><th>Donors:<th><td>' + layer.options.project.donor_1 + layer.options.project.donor_2 + layer.options.project.donor_3 + '<td></tr>';
+            html += '<tr><th>Donors:<th><td>' + layer.options.project.donor_1.name + layer.options.project.donor_2.name + layer.options.project.donor_3.name + '<td></tr>';
             // html += '<tr><th>Topic:<th><td>' + layer.options.project.topic.name + '<td></tr>';
             // html += '<tr><th>Category:<th><td>' + layer.options.project.category.name + '<td></tr>';
             // html += '<tr><th>Portfolio:<th><td>' + layer.options.project.portfolio + '<td></tr>';
@@ -335,7 +420,7 @@
             html += '<div class="project-info">'
             html += '<div class="title project-title">' + childClusters[i].options.project.specific_activity + '</div>';
             html += '<table class="separator space filter-content">';
-            html += '<tr><th>Donors:<th><td>' + childClusters[i].options.project.donor_1 + childClusters[i].options.project.donor_2 + childClusters[i].options.project.donor_3 + '<td></tr>';
+            html += '<tr><th>Donors:<th><td>' + childClusters[i].options.project.donor_1.name + childClusters[i].options.project.donor_2.name + childClusters[i].options.project.donor_3.name + '<td></tr>';
 
             var value = (childClusters[i].options.project.activity_value.length > 0) ? childClusters[i].options.project.activity_value + ' USD': '';
 
@@ -415,7 +500,8 @@
                     clickable: true,
                     style: style,
                 }).addTo(map);
-                setMarkers(map, data)
+                setMarkers(map, data);
+                setSearchLayer();
             })
             .catch(function (error) {
                 console.log(error);
@@ -446,6 +532,17 @@
     }
 
     document.addEventListener('contextmenu', event => event.preventDefault());
+
+    window.addEventListener("keyup", function(e){
+    /*
+     * keyCode: 8
+     * keyIdentifier: "U+0008"
+    */
+
+    if(e.keyCode === 8 && document.activeElement.id === 'donors') {
+        if(document.activeElement.value.length === 0) onOptionChange();
+    }
+});
 
 </script>
 <script src="/static/js/sidebar.js"></script>

@@ -42,7 +42,7 @@ class DonorAdmin(admin.ModelAdmin):
 
 
 class ActivitiesAdmin(admin.ModelAdmin):
-    list_display = ('location', 'category', 'topic', 'sdg', 'donor')
+    list_display = ('location', 'category', 'topic', 'sdg', 'donor_1', 'donor_2', 'donor_3')
 
     class Meta:
         model = Activities
