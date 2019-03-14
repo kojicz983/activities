@@ -326,7 +326,7 @@
 
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
-            var title = item.topic.name + ' - ' + item.category.name + ': ' + item.project_name;
+            var title = item.topic.name + ': ' + item.project_name;
             var marker = L.marker(new L.LatLng(item.sublocation.latitude, item.sublocation.longitude), { project: item, title: title });
             marker.on('click', markerClick);
             markers.addLayer(marker);
