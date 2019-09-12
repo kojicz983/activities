@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
     <link rel="stylesheet" href="/static/css/leaflet.css" />
     {% leaflet_js %}
     {% load static %}
@@ -20,8 +21,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <style>
-        .leaflet-container { 
-            height: 1064px; 
+        .leaflet-container {
+            height: 1064px;
             width: 100vw}
         .controlers { width: 500px;}
         .sdg-contorls [type=radio] {
@@ -147,10 +148,10 @@
         <div class="row align-middle">
             <div class="copyright">
                 <p>
-           
-                    © 
+
+                    ©
                     2019
-                     
+
                     United Nations Development Programme</p>
             </div>
             <div class="disclaimer">
@@ -179,9 +180,9 @@
         // },
         close: function (event, ui) {
           var donor = document.querySelector('input[name=donors]').value;
-        
+
 //          if (donor.length == 0)
-            onOptionChange();  
+            onOptionChange();
         },
     });
 
@@ -199,7 +200,7 @@
 
     function onOptionChange() {
 
- 
+
         var topic = document.querySelector('input[name=topics]:checked').value;
         var sdg = document.querySelector('input[name=sdgs]:checked').value;
         //var category = document.querySelector('input[name=categories]:checked').value;
@@ -250,7 +251,7 @@
                 clickable: true,
                 style: style,
                 // onEachFeature: onEachFeature
-            }).addTo(map);        
+            }).addTo(map);
             setSearchLayer();
         }).catch(function (error) {
             console.log(error);
@@ -302,7 +303,7 @@
             }
         });
         searchLayer.on('search:locationfound', function(e) {
-            
+
             //console.log('search:locationfound', );
             //map.removeLayer(this._markerSearch)
             e.layer.setStyle({fillColor: 'rgba(0, 54, 128, 0.75)', color: 'rgba(0, 54, 128, 0.75)'});
@@ -311,9 +312,9 @@
         }).on('search:collapsed', function(e) {
             projectMunicipalities.eachLayer(function(layer) {	//restore feature color
                 projectMunicipalities.resetStyle(layer);
-            });	
+            });
         });
-        
+
 	    map.addControl( searchLayer );
     }
 
@@ -376,7 +377,7 @@
             html += '<tr><th>Start date:<th><td>' + layer.options.project.start_date + '<td></tr>';
             html += '<tr><th>End date:<th><td>' + layer.options.project.end_date + '<td></tr>';
             html += '<tr><th>Project Name:<th><td>' + layer.options.project.project_name + '<td></tr>';
-            
+
             var beneficiaries = parseInt(layer.options.project.beneficiaries);
             html += '<tr><th>Beneficiaries:<th><td>' + (isNaN(beneficiaries) ? '' : beneficiaries.toLocaleString('en')) + '<td></tr>';
 
@@ -386,7 +387,7 @@
             html += '<img src="/static/images/sdg-' + layer.options.project.sdg.id + '.png" width="24px" style="vertical-align: middle;"><h4 style="display:inline;margin:10px;">' + layer.options.project.sdg.name + '</h4>';
             html += '</div>';
             html += '</div>';
-            
+
         setTimeout(function () {
             sidebar.setContent(html);
             sidebar.show();
@@ -407,11 +408,11 @@
 
             setTimeout(function () {
                 sidebar.hide();
-            }, 300);    
+            }, 300);
 
             var childClusters = cluster.getAllChildMarkers();
 
-            var html = ''    
+            var html = ''
             html += '<img src="/static/images/marker-icon.png" width="18px" style="vertical-align: middle;"><h3 style="display:inline;margin:10px;">' + childClusters[0].options.project.location.name + '</h3>';
             html += '<hr>';
 
@@ -452,7 +453,7 @@
                 else document.getElementsByClassName("leaflet-sidebar")[0].style.height = 'auto';
             }, 300);
         }
-        
+
 
     }
 
@@ -520,10 +521,10 @@
             content.style.maxHeight = null;
             } else {
             content.style.maxHeight = content.scrollHeight + "px";
-            } 
+            }
         });
     }
-    
+
     var contentElems = document.getElementsByClassName("collapsible-content");
 
 
