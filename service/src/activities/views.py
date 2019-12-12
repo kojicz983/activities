@@ -1,16 +1,11 @@
-import json
-
-from django.core import serializers as serializer
-from django.views.generic import ListView
 from django.views.generic import TemplateView
-from django.shortcuts import render
 
 from rest_framework import serializers, viewsets
 
-from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import FilterSet, RangeFilter, BaseInFilter, NumberFilter
 
 from .models import Activities, Location, Category, Topic, SDG, Donor
+
 
 # Create your views here.
 class LocationSerializer(serializers.ModelSerializer):
@@ -35,6 +30,7 @@ class SDGSerializer(serializers.ModelSerializer):
     class Meta:
         model = SDG
         fields = '__all__'
+
 
 class DonorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,7 +63,7 @@ class ActivitiesFilter(FilterSet):
 
     class Meta:
         model = Activities
-        fields = ('sdg', 'topic', 'donor_1', 'category_in', 'activity_value' )
+        fields = ('sdg', 'topic', 'donor_1', 'category_in', 'activity_value')
 
 
 class ActivitiesViewSet(viewsets.ModelViewSet):
@@ -77,13 +73,13 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
 
 
 class IndexView(TemplateView):
-    template_name='index.html'
+    template_name = 'index.html'
     queryset = Activities.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['topics'] = Topic.objects.all() #filter(id__in=self.queryset.values('topic').distinct())
-        context['categories'] = Category.objects.all() #.filter(id__in=self.queryset.values('category').distinct())
-        context['sdgs'] = SDG.objects.all() #filter(id__in=self.queryset.values('sdg').distinct())
+        context['topics'] = Topic.objects.all()
+        context['categories'] = Category.objects.all()
+        context['sdgs'] = SDG.objects.all()
         context['donors'] = Donor.objects.all().order_by('name')
         return context

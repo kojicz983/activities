@@ -15,14 +15,9 @@ services:
       - database
 
   database:
-    image: postgres:10
+    image: postgres:10-alpine
     restart: always
     env_file: *envfile
-
-  agent:
-    build: ./ansible
     volumes:
-      - ./ansible/probe.yml:/ansible/site.yml
-    links:
-      - database
-    env_file: *envfile
+      - ./sql/initdb:/docker-entrypoint-initdb.d:ro
+      - ./data:/var/lib/postgresql/data
