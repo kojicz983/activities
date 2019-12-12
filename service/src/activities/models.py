@@ -41,10 +41,10 @@ class ActivitiesManager(models.Manager):
             .select_related('sublocation')\
             .select_related('topic')\
             .select_related('sdg')\
-            .select_related('category')\
             .select_related('donor_1')\
             .select_related('donor_2')\
-            .select_related('donor_3')
+            .select_related('donor_3')\
+            .prefetch_related('categories')
 
 
 class Activities(models.Model):
@@ -52,7 +52,7 @@ class Activities(models.Model):
     sublocation = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, related_name='sublocation')
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     sdg = models.ForeignKey(SDG, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category)
     project_name = models.CharField(null=False, blank=False, max_length=300)
     portfolio = models.CharField(null=False, blank=False, max_length=50)
     cluster = models.CharField(null=False, blank=False, max_length=50)

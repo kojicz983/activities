@@ -45,7 +45,7 @@ class DonorSerializer(serializers.ModelSerializer):
 class ActivitiesSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
     sublocation = LocationSerializer()
-    category = CategorySerializer()
+    categories = CategorySerializer(read_only=True, many=True)
     topic = TopicSerializer()
     sdg = SDGSerializer()
     donor_1 = DonorSerializer()
@@ -56,12 +56,14 @@ class ActivitiesSerializer(serializers.ModelSerializer):
         model = Activities
         fields = '__all__'
 
+
 class NumberInFilter(BaseInFilter, NumberFilter):
     pass
 
+
 class ActivitiesFilter(FilterSet):
     activity_value = RangeFilter()
-    category_in = NumberInFilter(field_name='category', lookup_expr='in')
+    category_in = NumberInFilter(field_name='categories', lookup_expr='in')
 
     class Meta:
         model = Activities
