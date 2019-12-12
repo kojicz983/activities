@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-import pandas as pd
 import numpy
-from datetime import datetime
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
+import pandas as pd
+
 
 from activities.models import Activities, Location, Topic, Category, SDG, Donor
 
@@ -19,11 +18,10 @@ class Command(BaseCommand):
         df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
         df = df.replace(numpy.nan, '', regex=True)
 
-        for index, row in df.iterrows():
-            category = row['Category (Activity Type, choose from drop down)']
+        for _, row in df.iterrows():
             location = Location.objects.get_or_create(name=row['Location'].strip())[0]
-            sublocation = Location.objects.get_or_create(name=row['Sub-location (if any)'].strip())[0]
-            tpc = row['Topic (choose from drop down)']            
+            sublocation = Location.objects.get_or_create(
+                name=row['Sub-location (if any)'].strip())[0]
             val = row['Activity Value']
             self.stdout.write(self.style.SUCCESS(f'Location: {location}'))
             self.stdout.write(self.style.SUCCESS(f'Value: {val}'))
@@ -37,9 +35,12 @@ class Command(BaseCommand):
                 portfolio=row['Portfolio'],
                 cluster=row['Cluster'],
                 specific_activity=row['Specific Activity (restricted to 140 chars)'],
-                donor_1=Donor.objects.get_or_create(name=row['Donor 1 (choose from drop down)'].strip())[0],
-                donor_2=Donor.objects.get_or_create(name=row['Donor 2 (choose from drop down)'].strip())[0],
-                donor_3=Donor.objects.get_or_create(name=row['Donor 3 (choose from drop down)'].strip())[0],
+                donor_1=Donor.objects.get_or_create(
+                    name=row['Donor 1 (choose from drop down)'].strip())[0],
+                donor_2=Donor.objects.get_or_create(
+                    name=row['Donor 2 (choose from drop down)'].strip())[0],
+                donor_3=Donor.objects.get_or_create(
+                    name=row['Donor 3 (choose from drop down)'].strip())[0],
                 activity_value=row['Activity Value'],
                 beneficiaries=row['Beneficiaries'],
                 start_date=row['Start Date'],
@@ -52,8 +53,7 @@ class Command(BaseCommand):
             activity.categories.add(Category.objects.get(name=primary_category))
             if secondary_category:
                 activity.categories.add(Category.objects.get(name=secondary_category))
-            
+
             activity.save()
 
         self.stdout.write(self.style.SUCCESS(f'Start'))
-
