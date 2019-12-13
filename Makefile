@@ -25,7 +25,7 @@ boot: clean init
 
 ## Find geo locations
 findgeo:
-	docker-compose exec service python manage.py findgeo
+	docker-compose exec service app manage.py findgeo
 
 logs:
 	docker-compose logs -f

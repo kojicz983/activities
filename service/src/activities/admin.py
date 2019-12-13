@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Activities, Location, Category, Topic, SDG, Donor
 
-# Register your models here.
+
 class LocationAdmin(admin.ModelAdmin):
     class Meta:
         model = Location
@@ -33,19 +33,44 @@ class SDGAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         return {}
 
+
 class DonorAdmin(admin.ModelAdmin):
     class Meta:
         model = Donor
 
     def get_model_perms(self, request):
-        return {}            
+        return {}
 
 
 class ActivitiesAdmin(admin.ModelAdmin):
-    list_display = ('location', 'topic', 'sdg', 'donor_1', 'donor_2', 'donor_3')
+    list_display = (
+        'location', 'owner', 'topic', 'sdg',
+        'donor_1', 'donor_2', 'donor_3', 'start_date', 'end_date')
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.exclude = []
+        if not request.user.is_superuser:
+            self.exclude.append('owner')
+        return super(ActivitiesAdmin, self).get_form(request, obj, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        if change is False and getattr(obj, 'owner', None) is None:
+            obj.owner = request.user
+        obj.save()
+
+    def get_queryset(self, request):
+        if request.user.is_superuser:
+            queryset = Activities.objects.all()
+        else:
+            try:
+                queryset = Activities.objects.filter(owner=request.user)
+            except:
+                queryset = Activities.objects.none()
+        return queryset
 
     class Meta:
         model = Activities
+
 
 admin.site.register(Activities, ActivitiesAdmin)
 admin.site.register(Location, LocationAdmin)

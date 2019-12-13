@@ -1,69 +1,10 @@
 from django.views.generic import TemplateView
 
-from rest_framework import serializers, viewsets
+from rest_framework import viewsets
 
-from django_filters import FilterSet, RangeFilter, BaseInFilter, NumberFilter
-
-from .models import Activities, Location, Category, Topic, SDG, Donor
-
-
-# Create your views here.
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = '__all__'
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
-
-class TopicSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Topic
-        fields = '__all__'
-
-
-class SDGSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SDG
-        fields = '__all__'
-
-
-class DonorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Donor
-        fields = '__all__'
-
-
-class ActivitiesSerializer(serializers.ModelSerializer):
-    location = LocationSerializer()
-    sublocation = LocationSerializer()
-    categories = CategorySerializer(read_only=True, many=True)
-    topic = TopicSerializer()
-    sdg = SDGSerializer()
-    donor_1 = DonorSerializer()
-    donor_2 = DonorSerializer()
-    donor_3 = DonorSerializer()
-
-    class Meta:
-        model = Activities
-        fields = '__all__'
-
-
-class NumberInFilter(BaseInFilter, NumberFilter):
-    pass
-
-
-class ActivitiesFilter(FilterSet):
-    activity_value = RangeFilter()
-    category_in = NumberInFilter(field_name='categories', lookup_expr='in')
-
-    class Meta:
-        model = Activities
-        fields = ('sdg', 'topic', 'donor_1', 'category_in', 'activity_value')
+from .models import Activities, Category, Topic, SDG, Donor
+from .serializers import ActivitiesSerializer
+from .filters import ActivitiesFilter
 
 
 class ActivitiesViewSet(viewsets.ModelViewSet):
