@@ -3,11 +3,13 @@ from .models import Activities, Location, Category, Topic, SDG, Donor
 
 
 class LocationAdmin(admin.ModelAdmin):
+    ordering = ('name', )
+
     class Meta:
         model = Location
 
-    def get_model_perms(self, request):
-        return {}
+    # def get_model_perms(self, request):
+    #     return {}
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -44,14 +46,23 @@ class DonorAdmin(admin.ModelAdmin):
 
 class ActivitiesAdmin(admin.ModelAdmin):
     list_display = (
-        'location', 'owner', 'topic', 'sdg',
+        'location', 'topic', 'sdg',
         'donor_1', 'donor_2', 'donor_3', 'start_date', 'end_date')
+
+    search_fields = ('topic__name', 'location__name', )
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []
         if not request.user.is_superuser:
             self.exclude.append('owner')
         return super(ActivitiesAdmin, self).get_form(request, obj, **kwargs)
+
+    def changelist_view(self, request, extra_context=None):
+        if request.user.is_superuser:
+            if 'owner' not in self.list_display:
+                self.list_display += ('owner', )
+            self.list_editable = ('owner', )
+        return super(ActivitiesAdmin, self).changelist_view(request, extra_context)
 
     def save_model(self, request, obj, form, change):
         if change is False and getattr(obj, 'owner', None) is None:
@@ -62,10 +73,8 @@ class ActivitiesAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             queryset = Activities.objects.all()
         else:
-            try:
-                queryset = Activities.objects.filter(owner=request.user)
-            except:
-                queryset = Activities.objects.none()
+            queryset = Activities.objects.filter(owner=request.user)
+
         return queryset
 
     class Meta:
