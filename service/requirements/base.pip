@@ -12,3 +12,4 @@ jsonfield==2.0.2
 Pillow==4.2.1
 six==1.10.0
 django-filter==2.2
+django-import-export==2.0.1

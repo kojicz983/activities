@@ -1,4 +1,8 @@
 from django.contrib import admin
+
+from import_export.resources import ModelResource
+from import_export.admin import ImportExportModelAdmin
+
 from .models import Activities, Location, Category, Topic, SDG, Donor
 
 
@@ -44,12 +48,27 @@ class DonorAdmin(admin.ModelAdmin):
         return {}
 
 
-class ActivitiesAdmin(admin.ModelAdmin):
-    list_display = (
-        'location', 'topic', 'sdg', 'project_name', 'specific_activity',
-        'donor_1', 'donor_2', 'donor_3', 'start_date', 'end_date')
+class ActivitiesResource(ModelResource):
+    class Meta:
+        model = Activities
+        fields = (
+            'id', 'location__name', 'sublocation__name','topic__name',
+            'sdg__name', 'project_name', 'specific_activity', 'portfolio',
+            'cluster', 'donor_1__name', 'donor_2__name', 'donor_3__name',
+            'start_date', 'end_date', 'activity_value', 'beneficiaries'
+        )
+        export_order = fields
 
-    search_fields = ('topic__name', 'location__name', )
+
+class ActivitiesAdmin(ImportExportModelAdmin):
+    list_display = (
+        'location', 'topic', 'sdg', 'project_name',
+        'specific_activity', 'cluster', 'portfolio',
+        'donor_1', 'donor_2', 'donor_3', 'start_date',
+        'end_date'
+    )
+    search_fields = ('topic__name', 'location__name', 'portfolio', 'cluster')
+    resource_class = ActivitiesResource
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = []

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'leaflet',
     'djgeojson',
     'activities',
+    'import_export'
 ]
 
 MIDDLEWARE = [
@@ -135,14 +136,14 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend', ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
 
 LEAFLET_CONFIG = {
-    'SPATIAL_EXTENT': (14.6564400,46.3496400, 28.3564400,  41.0496400),
+    'SPATIAL_EXTENT': (14.6564400, 46.3496400, 28.3564400, 41.0496400),
     'DEFAULT_CENTER': (44.508248, 20.914047),
     'DEFAULT_ZOOM': 8,
     'MIN_ZOOM': 8,
