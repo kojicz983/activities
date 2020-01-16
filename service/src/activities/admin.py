@@ -46,7 +46,7 @@ class DonorAdmin(admin.ModelAdmin):
 
 class ActivitiesAdmin(admin.ModelAdmin):
     list_display = (
-        'location', 'topic', 'sdg',
+        'location', 'topic', 'sdg', 'project_name', 'specific_activity'
         'donor_1', 'donor_2', 'donor_3', 'start_date', 'end_date')
 
     search_fields = ('topic__name', 'location__name', )
