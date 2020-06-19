@@ -114,3 +114,5 @@ service/include
 
 #Ignore pip self check
 service/pip-selfcheck.json
+
+static_cdn/
