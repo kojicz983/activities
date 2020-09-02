@@ -423,7 +423,7 @@
             html += '<table class="separator space filter-content">';
             html += '<tr><th>Donors:<th><td>' + childClusters[i].options.project.donor_1.name + childClusters[i].options.project.donor_2.name + childClusters[i].options.project.donor_3.name + '<td></tr>';
 
-            var value = (childClusters[i].options.project.activity_value.length > 0) ? childClusters[i].options.project.activity_value + ' USD': '';
+            var value = childClusters[i].options.project.activity_value ? childClusters[i].options.project.activity_value + ' USD': '';
 
             html += '<tr><th>Value:<th><td>' + value.toLocaleString('en') + '<td></tr>';
             html += '<tr><th>Start date:<th><td>' + childClusters[i].options.project.start_date + '<td></tr>';
