@@ -52,7 +52,7 @@ class ActivitiesResource(ModelResource):
     class Meta:
         model = Activities
         fields = (
-            'id', 'location__name', 'sublocation__name','topic__name',
+            'id', 'location__name', 'sublocation__name', 'topic__name',
             'sdg__name', 'project_name', 'specific_activity', 'portfolio',
             'cluster', 'donor_1__name', 'donor_2__name', 'donor_3__name',
             'start_date', 'end_date', 'activity_value', 'beneficiaries'
